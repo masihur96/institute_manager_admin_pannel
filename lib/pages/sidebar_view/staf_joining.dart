@@ -490,7 +490,7 @@ class _StaffJoiningState extends State<StaffJoining> {
                 Padding(
                   padding: const EdgeInsets.only(top: 10.0),
                   child: IMTextFormField(
-                    hintText: "Natio nality",
+                    hintText: "Nationality",
                     onSaved: (String? value) {
                       setState(() {
                         _nationality = value;
