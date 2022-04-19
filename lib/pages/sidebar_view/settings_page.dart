@@ -16,7 +16,7 @@ class _SettingsPageState extends State<SettingsPage> {
   TextEditingController _oldPassword = TextEditingController(text: '');
   TextEditingController _newPassword = TextEditingController(text: '');
   TextEditingController _reNewPassword = TextEditingController(text: '');
-  String error = 'Put a Strong Password';
+  String error = 'Put a Strong P assword';
   bool _isLoading = false;
   @override
   Widget build(BuildContext context) {
