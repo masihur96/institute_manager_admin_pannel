@@ -18,6 +18,7 @@ class TeacherJoiningPage extends StatefulWidget {
 }
 
 class _TeacherJoiningPageState extends State<TeacherJoiningPage> {
+  final TextEditingController nameController = TextEditingController();
 //size Variable
   bool _isLoading = false;
 
@@ -399,6 +400,9 @@ class _TeacherJoiningPageState extends State<TeacherJoiningPage> {
             ),
             ElevatedButton(
               onPressed: () {
+                final date = DateTime.now().toString();
+                var lastThree = date.substring(date.length - 3);
+                final String id = 'BM-${nameController.text[0]}$lastThree';
                 if (_formKeyOne.currentState!.validate() &&
                     _formKeyTwo.currentState!.validate() &&
                     _formKeyThree.currentState!.validate()) {
@@ -406,7 +410,7 @@ class _TeacherJoiningPageState extends State<TeacherJoiningPage> {
                   _formKeyTwo.currentState!.save();
                   _formKeyThree.currentState!.save();
 
-                  _submitData(publicProvider, firebaseProvider, _teacherID!);
+                  _submitData(publicProvider, firebaseProvider, id);
                 }
               },
               child: Padding(
@@ -448,18 +452,11 @@ class _TeacherJoiningPageState extends State<TeacherJoiningPage> {
             key: _formKeyOne,
             child: Column(
               children: [
-                IMTextFormField(
-                  hintText: "Teacher ID",
-                  onSaved: (String? value) {
-                    setState(() {
-                      _teacherID = value;
-                    });
-                  },
-                ),
                 Padding(
                   padding: const EdgeInsets.only(top: 10.0),
                   child: IMTextFormField(
                     hintText: "Teacher Name",
+                    textEditingController: nameController,
                     onSaved: (String? value) {
                       setState(() {
                         _teacherName = value;
@@ -874,6 +871,7 @@ class _TeacherJoiningPageState extends State<TeacherJoiningPage> {
       }
     });
   }
+
   Future<void> _submitData(PublicProvider publicProvider,
       FirebaseProvider firebaseProvider, String id) async {
     DateTime date = DateTime.now();
@@ -884,7 +882,7 @@ class _TeacherJoiningPageState extends State<TeacherJoiningPage> {
     print(_section);
 
     Map<String, dynamic> map = {
-      'teacherID': _teacherID!,
+      'teacherID': id,
       'teacherName': _teacherName!,
       'fatherName': _fatherName!,
       'motherName': _motherName!,
@@ -933,6 +931,7 @@ class _TeacherJoiningPageState extends State<TeacherJoiningPage> {
       }
     });
   }
+
   _emptyFildCreator() {
     setState(() {
       _fatherName = String.fromCharCodes([]);

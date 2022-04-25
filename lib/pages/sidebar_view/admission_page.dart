@@ -21,6 +21,7 @@ class Admission extends StatefulWidget {
 }
 
 class _AdmissionState extends State<Admission> {
+  final TextEditingController nameController = TextEditingController();
 //size Variable
   bool _isLoading = false;
 
@@ -498,6 +499,9 @@ class _AdmissionState extends State<Admission> {
             ),
             ElevatedButton(
               onPressed: () {
+                final date = DateTime.now().toString();
+                var lastThree = date.substring(date.length - 3);
+                final String id = 'BM-${nameController.text[0]}$lastThree';
                 if (_formKeyOne.currentState!.validate() &&
                     _formKeyTwo.currentState!.validate() &&
                     _formKeyThree.currentState!.validate()) {
@@ -505,7 +509,7 @@ class _AdmissionState extends State<Admission> {
                   _formKeyTwo.currentState!.save();
                   _formKeyThree.currentState!.save();
 
-                  _submitData(publicProvider, firebaseProvider, _studentID!);
+                  _submitData(publicProvider, firebaseProvider, id);
                 }
               },
               child: Padding(
@@ -547,17 +551,10 @@ class _AdmissionState extends State<Admission> {
             key: _formKeyOne,
             child: Column(
               children: [
-                IMTextFormField(
-                  hintText: "Student ID",
-                  onSaved: (String? value) {
-                    setState(() {
-                      _studentID = value;
-                    });
-                  },
-                ),
                 Padding(
                   padding: const EdgeInsets.only(top: 10.0),
                   child: IMTextFormField(
+                    textEditingController: nameController,
                     hintText: "Student Name",
                     onSaved: (String? value) {
                       setState(() {
@@ -1053,7 +1050,7 @@ class _AdmissionState extends State<Admission> {
     print(studentTypeController.text);
 
     Map<String, dynamic> map = {
-      'studentID': _studentID!,
+      'studentID': id,
       'studentName': _studentName!,
       'fatherName': _fatherName!,
       'motherName': _motherName!,

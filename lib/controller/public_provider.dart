@@ -1,5 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:institute_manager_admin_pannel/pages/add_balance_page.dart';
+import 'package:institute_manager_admin_pannel/pages/all_students.dart';
+import 'package:institute_manager_admin_pannel/pages/all_teacher.dart';
+import 'package:institute_manager_admin_pannel/pages/attendance.dart';
+import 'package:institute_manager_admin_pannel/pages/exam.dart';
 import 'package:institute_manager_admin_pannel/pages/sidebar_view/advertisement_page.dart';
 import 'package:institute_manager_admin_pannel/pages/sidebar_view/all_product_page.dart';
 import 'package:institute_manager_admin_pannel/pages/sidebar_view/area_hub_page.dart';
@@ -68,6 +72,14 @@ class PublicProvider extends ChangeNotifier {
       return TeacherJoiningPage();
     else if (_subCategory == 'Staff Joining')
       return StaffJoining();
+    else if (_subCategory == 'All Student')
+      return AllStudent();
+    else if (_subCategory == 'All Teacher')
+      return AllTeacher();
+    else if (_subCategory == 'Attendance')
+      return Attendance();
+    else if (_subCategory == 'Exam')
+      return Exam();
     else if (_subCategory == 'Update Product')
       return UpdateProduct();
     else if (_subCategory == 'Regular Orders')

@@ -1,6 +1,5 @@
 import 'dart:convert';
 import 'dart:typed_data';
-
 import 'package:animated_custom_dropdown/custom_dropdown.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
@@ -12,6 +11,7 @@ import 'package:institute_manager_admin_pannel/pages/custom_widget/fading_circle
 import 'package:institute_manager_admin_pannel/pages/custom_widget/im_text_form_field.dart';
 import 'package:provider/provider.dart';
 import 'package:universal_html/html.dart';
+import 'package:nanoid/nanoid.dart';
 
 class StaffJoining extends StatefulWidget {
   const StaffJoining({Key? key}) : super(key: key);
@@ -21,6 +21,7 @@ class StaffJoining extends StatefulWidget {
 }
 
 class _StaffJoiningState extends State<StaffJoining> {
+  final TextEditingController nameController = TextEditingController();
   //size Variable
   bool _isLoading = false;
 
@@ -40,7 +41,7 @@ class _StaffJoiningState extends State<StaffJoining> {
 
 //Image URL
 
-  String teacherImageUrl = '';
+  String staffImageUrl = '';
   String nIDImageUrl = '';
   String cImageUrl = '';
   String eImageUrl = '';
@@ -112,8 +113,8 @@ class _StaffJoiningState extends State<StaffJoining> {
   final _formKeyThree = GlobalKey<FormState>();
 
   //Student info
-  String? _teacherID;
-  String? _teacherName;
+
+  String? _staffName;
   String? _birthDate;
   String? _fatherName;
   String? _motherName;
@@ -254,7 +255,7 @@ class _StaffJoiningState extends State<StaffJoining> {
                                     onPressed: () {
                                       tConvertedImages.clear();
                                       setState(() {
-                                        selectedFrame = 'Teacher';
+                                        selectedFrame = 'Stuff';
                                       });
                                       pickedImage();
                                     },
@@ -375,6 +376,9 @@ class _StaffJoiningState extends State<StaffJoining> {
             ),
             ElevatedButton(
               onPressed: () {
+                final date = DateTime.now().toString();
+                var lastThree = date.substring(date.length - 3);
+                final String id = 'BM-${nameController.text[0]}$lastThree';
                 if (_formKeyOne.currentState!.validate() &&
                     _formKeyTwo.currentState!.validate() &&
                     _formKeyThree.currentState!.validate()) {
@@ -382,7 +386,7 @@ class _StaffJoiningState extends State<StaffJoining> {
                   _formKeyTwo.currentState!.save();
                   _formKeyThree.currentState!.save();
 
-                  _submitData(publicProvider, firebaseProvider, _teacherID!);
+                  _submitData(publicProvider, firebaseProvider, id);
                 }
               },
               child: Padding(
@@ -424,21 +428,14 @@ class _StaffJoiningState extends State<StaffJoining> {
             key: _formKeyOne,
             child: Column(
               children: [
-                IMTextFormField(
-                  hintText: "Stuff ID",
-                  onSaved: (String? value) {
-                    setState(() {
-                      _teacherID = value;
-                    });
-                  },
-                ),
                 Padding(
                   padding: const EdgeInsets.only(top: 10.0),
                   child: IMTextFormField(
+                    textEditingController: nameController,
                     hintText: "Stuff Name",
                     onSaved: (String? value) {
                       setState(() {
-                        _teacherName = value;
+                        _staffName = value;
                       });
                     },
                   ),
@@ -788,7 +785,7 @@ class _StaffJoiningState extends State<StaffJoining> {
         reader.readAsDataUrl(image);
         reader.onLoadEnd.listen((event) async {
           if (selectedFrame == 'Stuff') {
-            print('Teacher');
+            print('Stuff');
             var snapshot = await fs
                 .ref()
                 .child('Stuff Photo')
@@ -796,7 +793,7 @@ class _StaffJoiningState extends State<StaffJoining> {
                 .putBlob(image);
             String downloadUrl = await snapshot.ref.getDownloadURL();
             setState(() {
-              teacherImageUrl = downloadUrl;
+              staffImageUrl = downloadUrl;
             });
           } else if (selectedFrame == 'NID') {
             setState(() {
@@ -853,8 +850,8 @@ class _StaffJoiningState extends State<StaffJoining> {
     print(_section);
 
     Map<String, dynamic> map = {
-      'stuffID': _teacherID!,
-      'stuffName': _teacherName!,
+      'stuffID': id,
+      'stuffName': _staffName!,
       'fatherName': _fatherName!,
       'motherName': _motherName!,
       'referenceName': _referenceName!,
@@ -875,7 +872,7 @@ class _StaffJoiningState extends State<StaffJoining> {
       'email': _email!,
       'status': studentStatusController.text,
       'salary': _msalary!,
-      'stuffImageUrl': teacherImageUrl,
+      'stuffImageUrl': staffImageUrl,
       'nIDImageUrl': nIDImageUrl,
       'eImageUrl': eImageUrl,
       'date': dateData,

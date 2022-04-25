@@ -344,6 +344,12 @@
       "languageVersion": "2.12"
     },
     {
+      "name": "nanoid",
+      "rootUri": "file:///C:/flutter_windows_2.0.4-stable/flutter/.pub-cache/hosted/pub.dartlang.org/nanoid-1.0.0",
+      "packageUri": "lib/",
+      "languageVersion": "2.12"
+    },
+    {
       "name": "nested",
       "rootUri": "file:///C:/flutter_windows_2.0.4-stable/flutter/.pub-cache/hosted/pub.dartlang.org/nested-1.0.0",
       "packageUri": "lib/",
@@ -614,7 +620,7 @@
       "languageVersion": "2.16"
     }
   ],
-  "generated": "2022-04-09T02:40:04.557018Z",
+  "generated": "2022-04-22T16:56:47.628716Z",
   "generator": "pub",
   "generatorVersion": "2.16.1"
 }
