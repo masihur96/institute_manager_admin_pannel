@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:institute_manager_admin_pannel/constants.dart';
-import 'package:institute_manager_admin_pannel/controller/public_provider.dart';
+import 'package:institute_manager_admin_pannel/model/provider_model/public_provider.dart';
 import 'package:institute_manager_admin_pannel/model/MyFiles.dart';
 import 'package:provider/provider.dart';
 

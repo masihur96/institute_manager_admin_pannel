@@ -3,8 +3,8 @@ import 'package:institute_manager_admin_pannel/pages/main_page.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:institute_manager_admin_pannel/pages/login_page.dart';
 
-import 'package:institute_manager_admin_pannel/controller/firebase_provider.dart';
-import 'package:institute_manager_admin_pannel/controller/public_provider.dart';
+import 'package:institute_manager_admin_pannel/model/provider_model/firebase_provider.dart';
+import 'package:institute_manager_admin_pannel/model/provider_model/public_provider.dart';
 import 'package:institute_manager_admin_pannel/pages/sidebar_view/admission_page.dart';
 import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';

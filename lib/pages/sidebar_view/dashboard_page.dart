@@ -7,8 +7,8 @@ import 'package:institute_manager_admin_pannel/pages/custom_widget/components/ch
 
 import 'package:institute_manager_admin_pannel/pages/custom_widget/components/my_fields.dart';
 import 'package:institute_manager_admin_pannel/pages/custom_widget/components/student_teacher_list.dart';
-import 'package:institute_manager_admin_pannel/controller/firebase_provider.dart';
-import 'package:institute_manager_admin_pannel/controller/public_provider.dart';
+import 'package:institute_manager_admin_pannel/model/provider_model/firebase_provider.dart';
+import 'package:institute_manager_admin_pannel/model/provider_model/public_provider.dart';
 
 import 'package:provider/provider.dart';
 
@@ -78,8 +78,8 @@ class _DashBoardPageState extends State<DashBoardPage> {
     if (firebaseProvider.infoList.isEmpty) {
       await firebaseProvider.subCategoryList();
     }
-    if (firebaseProvider.productList.isEmpty) {
-      await firebaseProvider.getProducts();
+    if (firebaseProvider.studentList.isEmpty) {
+      await firebaseProvider.getStudents();
     }
     if (firebaseProvider.packageList.isEmpty) {
       await firebaseProvider.getPackage();
@@ -115,9 +115,9 @@ class _DashBoardPageState extends State<DashBoardPage> {
     final PublicProvider publicProvider = Provider.of<PublicProvider>(context);
     final FirebaseProvider firebaseProvider =
         Provider.of<FirebaseProvider>(context);
-    if (counter == 0) {
-      _customInt(firebaseProvider);
-    }
+    // if (counter == 0) {
+    //   _customInt(firebaseProvider);
+    // }
     return SingleChildScrollView(
       scrollDirection: Axis.vertical,
       child: SingleChildScrollView(

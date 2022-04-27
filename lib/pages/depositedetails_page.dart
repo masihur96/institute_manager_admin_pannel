@@ -4,8 +4,8 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 
-import 'package:institute_manager_admin_pannel/controller/firebase_provider.dart';
-import 'package:institute_manager_admin_pannel/controller/public_provider.dart';
+import 'package:institute_manager_admin_pannel/model/provider_model/firebase_provider.dart';
+import 'package:institute_manager_admin_pannel/model/provider_model/public_provider.dart';
 
 import 'package:provider/provider.dart';
 

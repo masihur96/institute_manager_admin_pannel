@@ -1,8 +1,8 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:institute_manager_admin_pannel/model/data_model/package_order_request_model.dart';
-import 'package:institute_manager_admin_pannel/controller/firebase_provider.dart';
-import 'package:institute_manager_admin_pannel/controller/public_provider.dart';
+import 'package:institute_manager_admin_pannel/model/provider_model/firebase_provider.dart';
+import 'package:institute_manager_admin_pannel/model/provider_model/public_provider.dart';
 import 'package:institute_manager_admin_pannel/pages/custom_widget/fading_circle.dart';
 import 'package:institute_manager_admin_pannel/pages/custom_widget/form_decoration.dart';
 import 'package:provider/provider.dart';

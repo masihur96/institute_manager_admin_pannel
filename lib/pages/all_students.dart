@@ -1,10 +1,10 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
-import 'package:institute_manager_admin_pannel/controller/firebase_provider.dart';
-import 'package:institute_manager_admin_pannel/controller/public_provider.dart';
+import 'package:institute_manager_admin_pannel/model/provider_model/firebase_provider.dart';
+import 'package:institute_manager_admin_pannel/model/provider_model/public_provider.dart';
 import 'package:institute_manager_admin_pannel/model/data_model/category_model.dart';
-import 'package:institute_manager_admin_pannel/model/data_model/product_model.dart';
+import 'package:institute_manager_admin_pannel/model/data_model/student_model.dart';
 import 'package:institute_manager_admin_pannel/model/data_model/sub_category_model.dart';
 import 'package:institute_manager_admin_pannel/pages/custom_widget/fading_circle.dart';
 import 'package:institute_manager_admin_pannel/pages/custom_widget/form_decoration.dart';
@@ -39,17 +39,17 @@ class _AllStudentState extends State<AllStudent> {
       _isLoading = true;
     });
 
-    if (firebaseProvider.productList.isEmpty) {
-      await firebaseProvider.getProducts().then((value) {
+    if (firebaseProvider.studentList.isEmpty) {
+      await firebaseProvider.getStudents().then((value) {
         setState(() {
-          _subList = firebaseProvider.productList;
+          _subList = firebaseProvider.studentList;
           _filteredList = _subList;
           _isLoading = false;
         });
       });
     } else {
       setState(() {
-        _subList = firebaseProvider.productList;
+        _subList = firebaseProvider.studentList;
         _filteredList = _subList;
         _isLoading = false;
       });
@@ -153,14 +153,14 @@ class _AllStudentState extends State<AllStudent> {
                                       batch.delete(ref);
                                     }
                                     batch.commit().then((value) {
-                                      firebaseProvider.getProducts();
+                                      firebaseProvider.getStudents();
                                       selectedProduct.clear();
                                       Navigator.of(context).pop();
                                     });
 
                                     selectedProductID.forEach((element) {
                                       deleteSinglePhoto(firebaseProvider
-                                          .productList[element].image);
+                                          .studentList[element].image);
                                     });
 
                                     Navigator.of(context).pop();
@@ -203,7 +203,7 @@ class _AllStudentState extends State<AllStudent> {
                       });
 
                       firebaseProvider
-                          .getProducts()
+                          .getStudents()
                           .then((value) => _isLoading = false);
                     },
                     icon: Icon(
@@ -570,11 +570,11 @@ class _AllStudentState extends State<AllStudent> {
               decoration: BoxDecoration(
                   borderRadius: BorderRadius.all(Radius.circular(10)),
                   border: Border.all(width: 1, color: Colors.grey)),
-              child: firebaseProvider.productList[index].image.isNotEmpty
+              child: firebaseProvider.studentList[index].image.isNotEmpty
                   ? Container(
                       child: Image.network(
                         firebaseProvider
-                            .productList[index].image[_currentIndex],
+                            .studentList[index].image[_currentIndex],
                         fit: BoxFit.cover,
                       ),
                     )
@@ -590,9 +590,9 @@ class _AllStudentState extends State<AllStudent> {
             child: ListView.builder(
                 scrollDirection: Axis.horizontal,
                 shrinkWrap: true,
-                itemCount: firebaseProvider.productList[index].image.length == 0
+                itemCount: firebaseProvider.studentList[index].image.length == 0
                     ? 3
-                    : firebaseProvider.productList[index].image.length,
+                    : firebaseProvider.studentList[index].image.length,
                 itemBuilder: (BuildContext ctx, indx) {
                   return Padding(
                     padding: const EdgeInsets.all(8.0),
@@ -603,7 +603,7 @@ class _AllStudentState extends State<AllStudent> {
                         });
                       },
                       child: firebaseProvider
-                              .productList[index].image.isNotEmpty
+                              .studentList[index].image.isNotEmpty
                           ? Container(
                               width: publicProvider.isWindows
                                   ? size.height * .2
@@ -618,7 +618,7 @@ class _AllStudentState extends State<AllStudent> {
                                       Border.all(width: 1, color: Colors.grey)),
                               alignment: Alignment.center,
                               child: Image.network(
-                                firebaseProvider.productList[index].image[indx],
+                                firebaseProvider.studentList[index].image[indx],
                                 fit: BoxFit.fill,
                               ))
                           : Container(
@@ -668,7 +668,7 @@ class _AllStudentState extends State<AllStudent> {
                   Padding(
                     padding: const EdgeInsets.only(top: 8.0, bottom: 8.0),
                     child: Text(
-                      firebaseProvider.productList[index].title,
+                      firebaseProvider.studentList[index].title,
                       style: TextStyle(
                         fontSize: publicProvider.isWindows
                             ? size.height * .025
@@ -679,7 +679,7 @@ class _AllStudentState extends State<AllStudent> {
                   Padding(
                       padding: const EdgeInsets.only(top: 8.0, bottom: 8.0),
                       child: Text(
-                        'Description: ${firebaseProvider.productList[index].description}',
+                        'Description: ${firebaseProvider.studentList[index].description}',
                         style: TextStyle(
                           fontSize: publicProvider.isWindows
                               ? size.height * .025
@@ -689,14 +689,14 @@ class _AllStudentState extends State<AllStudent> {
                   Padding(
                       padding: const EdgeInsets.only(top: 8.0, bottom: 8.0),
                       child: Text(
-                        'Price: ${firebaseProvider.productList[index].price}',
+                        'Price: ${firebaseProvider.studentList[index].price}',
                         style: TextStyle(
                           fontSize: publicProvider.isWindows
                               ? size.height * .025
                               : size.width * .025,
                         ),
                       )),
-                  firebaseProvider.productList[index].colors.length == 0
+                  firebaseProvider.studentList[index].colors.length == 0
                       ? SizedBox()
                       : Padding(
                           padding: const EdgeInsets.only(top: 8.0, bottom: 8.0),
@@ -717,7 +717,7 @@ class _AllStudentState extends State<AllStudent> {
                                     scrollDirection: Axis.horizontal,
                                     shrinkWrap: true,
                                     itemCount: firebaseProvider
-                                        .productList[index].colors.length,
+                                        .studentList[index].colors.length,
                                     itemBuilder: (_, idx) {
                                       return Padding(
                                         padding: const EdgeInsets.all(8.0),
@@ -729,7 +729,7 @@ class _AllStudentState extends State<AllStudent> {
                                               decoration: BoxDecoration(
                                                   color: Color(int.parse(
                                                       firebaseProvider
-                                                          .productList[index]
+                                                          .studentList[index]
                                                           .colors[idx])),
                                                   shape: BoxShape.circle),
                                             ),
@@ -740,7 +740,7 @@ class _AllStudentState extends State<AllStudent> {
                               ],
                             ),
                           )),
-                  firebaseProvider.productList[index].size.length == 0
+                  firebaseProvider.studentList[index].size.length == 0
                       ? SizedBox()
                       : Container(
                           // width: size.height*.5,
@@ -760,14 +760,14 @@ class _AllStudentState extends State<AllStudent> {
                                   scrollDirection: Axis.horizontal,
                                   shrinkWrap: true,
                                   itemCount: firebaseProvider
-                                      .productList[index].size.length,
+                                      .studentList[index].size.length,
                                   itemBuilder: (_, idx) {
                                     return Padding(
                                       padding: const EdgeInsets.symmetric(
                                           horizontal: 8.0),
                                       child: Text(
                                         firebaseProvider
-                                            .productList[index].size[idx],
+                                            .studentList[index].size[idx],
                                         style: TextStyle(
                                           fontSize: publicProvider.isWindows
                                               ? size.height * .025
@@ -782,7 +782,7 @@ class _AllStudentState extends State<AllStudent> {
                   Padding(
                       padding: const EdgeInsets.only(top: 8.0, bottom: 8.0),
                       child: Text(
-                        'Profit Amount: ${firebaseProvider.productList[index].profitAmount}',
+                        'Profit Amount: ${firebaseProvider.studentList[index].profitAmount}',
                         style: TextStyle(
                           fontSize: publicProvider.isWindows
                               ? size.height * .025
@@ -792,7 +792,7 @@ class _AllStudentState extends State<AllStudent> {
                   Padding(
                       padding: const EdgeInsets.only(top: 8.0, bottom: 8.0),
                       child: Text(
-                        'Category:  ${firebaseProvider.productList[index].category}',
+                        'Category:  ${firebaseProvider.studentList[index].category}',
                         style: TextStyle(
                           fontSize: publicProvider.isWindows
                               ? size.height * .025
@@ -802,7 +802,7 @@ class _AllStudentState extends State<AllStudent> {
                   Padding(
                       padding: const EdgeInsets.only(top: 8.0, bottom: 8.0),
                       child: Text(
-                        'Subcategory: ${firebaseProvider.productList[index].subCategory}',
+                        'Subcategory: ${firebaseProvider.studentList[index].subCategory}',
                         style: TextStyle(
                           fontSize: publicProvider.isWindows
                               ? size.height * .025
@@ -810,7 +810,7 @@ class _AllStudentState extends State<AllStudent> {
                         ),
                       )),
                   Text(
-                    'Upload Date: ${firebaseProvider.productList[index].date}',
+                    'Upload Date: ${firebaseProvider.studentList[index].date}',
                     style: TextStyle(
                       fontSize: publicProvider.isWindows
                           ? size.height * .025

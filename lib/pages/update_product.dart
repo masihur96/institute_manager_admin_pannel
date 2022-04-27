@@ -8,8 +8,8 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flex_color_picker/flex_color_picker.dart';
 import 'package:flutter/material.dart';
-import 'package:institute_manager_admin_pannel/controller/firebase_provider.dart';
-import 'package:institute_manager_admin_pannel/controller/public_provider.dart';
+import 'package:institute_manager_admin_pannel/model/provider_model/firebase_provider.dart';
+import 'package:institute_manager_admin_pannel/model/provider_model/public_provider.dart';
 import 'package:institute_manager_admin_pannel/model/data_model/sub_category_model.dart';
 import 'package:institute_manager_admin_pannel/pages/custom_widget/fading_circle.dart';
 import 'package:institute_manager_admin_pannel/pages/custom_widget/form_decoration.dart';
@@ -116,27 +116,27 @@ class _UpdateProductState extends State<UpdateProduct> {
         _isLoading = true;
       });
       titleTextController.text =
-          firebaseProvider.productList[firebaseProvider.productIndex].title;
+          firebaseProvider.studentList[firebaseProvider.productIndex].title;
       descriptionTextController.text = firebaseProvider
-          .productList[firebaseProvider.productIndex].description;
+          .studentList[firebaseProvider.productIndex].description;
       priceTextController.text =
-          firebaseProvider.productList[firebaseProvider.productIndex].price;
+          firebaseProvider.studentList[firebaseProvider.productIndex].price;
       profitTextController.text = firebaseProvider
-          .productList[firebaseProvider.productIndex].profitAmount;
+          .studentList[firebaseProvider.productIndex].profitAmount;
       categoryDropdownValue =
-          firebaseProvider.productList[firebaseProvider.productIndex].category;
+          firebaseProvider.studentList[firebaseProvider.productIndex].category;
       subCategoryDropdownValue = firebaseProvider
-          .productList[firebaseProvider.productIndex].subCategory;
+          .studentList[firebaseProvider.productIndex].subCategory;
       selectedProductID =
-          firebaseProvider.productList[firebaseProvider.productIndex].id;
+          firebaseProvider.studentList[firebaseProvider.productIndex].id;
       selectedProductColor =
-          firebaseProvider.productList[firebaseProvider.productIndex].colors;
+          firebaseProvider.studentList[firebaseProvider.productIndex].colors;
       imageUrl =
-          firebaseProvider.productList[firebaseProvider.productIndex].image;
+          firebaseProvider.studentList[firebaseProvider.productIndex].image;
       thumbnailURL =
-          firebaseProvider.productList[firebaseProvider.productIndex].thumbnail;
+          firebaseProvider.studentList[firebaseProvider.productIndex].thumbnail;
       // imageUrl = firebaseProvider.packageList[firebaseProvider.packageIndex].image;
-      sizes = firebaseProvider.productList[firebaseProvider.productIndex].size;
+      sizes = firebaseProvider.studentList[firebaseProvider.productIndex].size;
 
       if (sizes.contains('XL')) {
         _isXL = true;
@@ -357,7 +357,7 @@ class _UpdateProductState extends State<UpdateProduct> {
                           ),
                           child: thumbnailURL.isNotEmpty
                               ? Image.network(firebaseProvider
-                                  .productList[firebaseProvider.productIndex]
+                                  .studentList[firebaseProvider.productIndex]
                                   .thumbnail)
                               : Container(),
                           height: publicProvider.isWindows
@@ -379,7 +379,7 @@ class _UpdateProductState extends State<UpdateProduct> {
                             ? 3
                             : convertedImages.length
                         : firebaseProvider
-                            .productList[firebaseProvider.productIndex]
+                            .studentList[firebaseProvider.productIndex]
                             .image
                             .length,
                     itemBuilder: (BuildContext ctx, index) {
@@ -415,7 +415,7 @@ class _UpdateProductState extends State<UpdateProduct> {
                                           width: 1, color: Colors.grey)),
                                   child: imageUrl.isNotEmpty
                                       ? Image.network(firebaseProvider
-                                          .productList[
+                                          .studentList[
                                               firebaseProvider.productIndex]
                                           .image[index])
                                       : Container(),
@@ -914,7 +914,7 @@ class _UpdateProductState extends State<UpdateProduct> {
     if (convertedImages.isEmpty) {
       setState(() {
         imageUrl =
-            firebaseProvider.productList[firebaseProvider.productIndex].image;
+            firebaseProvider.studentList[firebaseProvider.productIndex].image;
       });
       _submitData(firebaseProvider, publicProvider);
     } else {
@@ -975,7 +975,7 @@ class _UpdateProductState extends State<UpdateProduct> {
 
     await firebaseProvider.updateProductData(map).then((value) async {
       if (value) {
-        await firebaseProvider.getProducts().then((value) {
+        await firebaseProvider.getStudents().then((value) {
           setState(() {
             publicProvider.subCategory = 'All Product';
             publicProvider.category = '';

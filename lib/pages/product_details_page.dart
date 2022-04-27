@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 
-import 'package:institute_manager_admin_pannel/controller/public_provider.dart';
+import 'package:institute_manager_admin_pannel/model/provider_model/public_provider.dart';
 
 import 'package:provider/provider.dart';
 
