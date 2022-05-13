@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:institute_manager_admin_pannel/model/provider_model/data.dart';
 import 'package:institute_manager_admin_pannel/pages/main_page.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:institute_manager_admin_pannel/pages/login_page.dart';
@@ -42,6 +43,7 @@ class MyApp extends StatelessWidget {
       providers: [
         ChangeNotifierProvider(create: (context) => PublicProvider()),
         ChangeNotifierProvider(create: (context) => FirebaseProvider()),
+        ChangeNotifierProvider(create: (context) => Data()),
       ],
       child: MaterialApp(
         title: 'Institute Manager Admin Panel',

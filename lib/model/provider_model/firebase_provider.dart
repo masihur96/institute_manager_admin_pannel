@@ -226,6 +226,7 @@ class FirebaseProvider extends ChangeNotifier {
           .get()
           .then((snapShot) {
         _studentList.clear();
+
         snapShot.docChanges.forEach((element) {
           StudentModel studentModel = StudentModel(
             id: element.doc['id'],

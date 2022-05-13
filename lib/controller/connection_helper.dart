@@ -1,6 +1,17 @@
 import 'dart:io';
 
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:institute_manager_admin_pannel/model/data_model/student_model.dart';
+
 class ConnectionHelper {
+  Future<QuerySnapshot<Map<String, dynamic>>> getAllStudents(
+      String collectionName) {
+    return FirebaseFirestore.instance
+        .collection(collectionName)
+        .orderBy('studentName')
+        .get();
+  }
+
   // Future<Response<dynamic>?> getData(String url) async {
   //   try {
   //     // Starting Timer

@@ -1,6 +1,8 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
+import 'package:institute_manager_admin_pannel/controller/data_fetcher.dart';
+import 'package:institute_manager_admin_pannel/model/provider_model/data.dart';
 import 'package:institute_manager_admin_pannel/model/provider_model/firebase_provider.dart';
 import 'package:institute_manager_admin_pannel/model/provider_model/public_provider.dart';
 import 'package:institute_manager_admin_pannel/model/data_model/category_model.dart';
@@ -18,67 +20,97 @@ class AllStudent extends StatefulWidget {
 }
 
 class _AllStudentState extends State<AllStudent> {
-  var searchTextController = TextEditingController();
-  bool _isLoading = false;
-  //Category Variable
-  //
-  // List<CategoryModel> caterorys = [];
-  // List<SubCategoryModel> subCategorys = [];
-
-  List selectedProduct = []; //selected product for check
-  List selectedProductID = []; //selected product ID for Delete
-
-  final List<String> imgList = [];
-  int _currentIndex = 0;
-  int counter = 0;
-  List<StudentModel> _subList = [];
+  final DataFetcher _dataFetcher = DataFetcher();
+  List<StudentModel>? students;
   List<StudentModel> _filteredList = [];
-  _customInit(FirebaseProvider firebaseProvider) async {
-    setState(() {
-      counter++;
-      _isLoading = true;
-    });
 
-    if (firebaseProvider.studentList.isEmpty) {
-      await firebaseProvider.getStudents().then((value) {
-        setState(() {
-          _subList = firebaseProvider.studentList;
-          _filteredList = _subList;
-          _isLoading = false;
-        });
-      });
+  @override
+  initState() {
+    super.initState();
+    fetchStudents();
+  }
+
+  Future<void> fetchStudents() async {
+    List<StudentModel>? studentList =
+        Provider.of<Data>(context, listen: false).students;
+    if (studentList != null) {
+      students = studentList;
+      _filteredList = studentList;
+      setState(() {});
+      print(students![0].studentName);
+      print('Filtered: ${_filteredList[0].studentName}');
     } else {
-      setState(() {
-        _subList = firebaseProvider.studentList;
-        _filteredList = _subList;
-        _isLoading = false;
-      });
+      List<StudentModel> studentList = await _dataFetcher.getStudents();
+      Provider.of<Data>(context, listen: false).setStudents(studentList);
+      students = studentList;
+      _filteredList = studentList;
+      setState(() {});
+      print(students![0].studentName);
+      print('Filtered: ${_filteredList[0].studentName}');
     }
   }
 
-  _filterList(String searchItem) {
-    setState(() {
-      _filteredList = _subList
-          .where((element) => (element.studentName!
-              .toLowerCase()
-              .contains(searchItem.toLowerCase())))
-          .toList();
-    });
-  }
+  var searchTextController = TextEditingController();
+  bool _isLoading = false;
+  // //Category Variable
+  // //
+  // // List<CategoryModel> caterorys = [];
+  // // List<SubCategoryModel> subCategorys = [];
+  //
+  // List selectedProduct = []; //selected product for check
+  // List selectedProductID = []; //selected product ID for Delete
+  //
+  // final List<String> imgList = [];
+  // int _currentIndex = 0;
+  // int counter = 0;
+  List<StudentModel> _subList = [];
+
+  // _customInit(FirebaseProvider firebaseProvider) async {
+  //   setState(() {
+  //     counter++;
+  //     _isLoading = true;
+  //   });
+  //
+  //   if (firebaseProvider.studentList.isEmpty) {
+  //     await firebaseProvider.getStudents().then((value) {
+  //       setState(() {
+  //         _subList = firebaseProvider.studentList;
+  //         _filteredList = _subList;
+  //         _isLoading = false;
+  //       });
+  //     });
+  //   } else {
+  //     setState(() {
+  //       _subList = firebaseProvider.studentList;
+  //       _filteredList = _subList;
+  //       _isLoading = false;
+  //     });
+  //   }
+  // }
+  //
+  // _filterList(String searchItem) {
+  //   setState(() {
+  //     _filteredList = _subList
+  //         .where((element) => (element.studentName!
+  //             .toLowerCase()
+  //             .contains(searchItem.toLowerCase())))
+  //         .toList();
+  //   });
+  // }
 
   @override
   Widget build(BuildContext context) {
     final Size size = MediaQuery.of(context).size;
     final PublicProvider publicProvider = Provider.of<PublicProvider>(context);
-    final FirebaseProvider firebaseProvider =
-        Provider.of<FirebaseProvider>(context);
+    // final FirebaseProvider firebaseProvider =
+    //     Provider.of<FirebaseProvider>(context);
 
-    if (counter == 0) {
-      _customInit(firebaseProvider);
-    }
+    // if (counter == 0) {
+    //   _customInit(firebaseProvider);
+    // }
     return Container(
       width: publicProvider.pageWidth(size),
-      child: ListView(
+      child: Column(
         children: [
           Padding(
             padding: const EdgeInsets.all(8.0),
@@ -94,7 +126,7 @@ class _AllStudentState extends State<AllStudent> {
                         : size.width * .02,
                   ),
                 ),
-                onChanged: _filterList,
+                // onChanged: _filterList,
               ),
             ),
           ),
@@ -145,23 +177,23 @@ class _AllStudentState extends State<AllStudent> {
                                 TextButton(
                                   child: Text('Ok'),
                                   onPressed: () {
-                                    var db = FirebaseFirestore.instance;
-                                    WriteBatch batch = db.batch();
-                                    for (String id in selectedProductID) {
-                                      DocumentReference ref =
-                                          db.collection("Products").doc(id);
-                                      batch.delete(ref);
-                                    }
-                                    batch.commit().then((value) {
-                                      firebaseProvider.getStudents();
-                                      selectedProduct.clear();
-                                      Navigator.of(context).pop();
-                                    });
-
-                                    selectedProductID.forEach((element) {
-                                      deleteSinglePhoto(firebaseProvider
-                                          .studentList[element].image);
-                                    });
+                                    // var db = FirebaseFirestore.instance;
+                                    // WriteBatch batch = db.batch();
+                                    // for (String id in selectedProductID) {
+                                    //   DocumentReference ref =
+                                    //       db.collection("Products").doc(id);
+                                    //   batch.delete(ref);
+                                    // }
+                                    // batch.commit().then((value) {
+                                    //   firebaseProvider.getStudents();
+                                    //   selectedProduct.clear();
+                                    //   Navigator.of(context).pop();
+                                    // });
+                                    //
+                                    // selectedProductID.forEach((element) {
+                                    //   deleteSinglePhoto(firebaseProvider
+                                    //       .studentList[element].image);
+                                    // });
 
                                     Navigator.of(context).pop();
                                   },
@@ -180,8 +212,8 @@ class _AllStudentState extends State<AllStudent> {
                       backgroundColor: MaterialStateProperty.all(Colors.green)),
                   onPressed: () {
                     setState(() {
-                      selectedProduct.clear();
-                      selectedProductID.clear();
+                      // selectedProduct.clear();
+                      // selectedProductID.clear();
                     });
                   },
                   child: Padding(
@@ -201,10 +233,10 @@ class _AllStudentState extends State<AllStudent> {
                       setState(() {
                         _isLoading = true;
                       });
-
-                      firebaseProvider
-                          .getStudents()
-                          .then((value) => _isLoading = false);
+                      //
+                      // firebaseProvider
+                      //     .getStudents()
+                      //     .then((value) => _isLoading = false);
                     },
                     icon: Icon(
                       Icons.refresh_outlined,
@@ -317,325 +349,220 @@ class _AllStudentState extends State<AllStudent> {
                   padding: const EdgeInsets.all(8),
                   itemCount: _filteredList.length,
                   itemBuilder: (BuildContext context, int index) {
-                    print(_filteredList.length);
-                    return Container(
-                      child: Column(
-                        children: [
-                          Padding(
-                            padding: const EdgeInsets.symmetric(vertical: 8.0),
-                            child: Divider(
-                              height: 1,
-                              color: Colors.grey,
-                            ),
-                          ),
-                          Row(
-                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                            children: [
-                              InkWell(
-                                  onTap: () {
-                                    setState(() {
-                                      if (selectedProduct.contains(index)) {
-                                        selectedProductID
-                                            .remove(_filteredList[index].id);
-                                        selectedProduct.remove(index);
-                                      } else {
-                                        selectedProductID
-                                            .add(_filteredList[index].id);
-                                        selectedProduct.add(index);
-                                      }
-                                    });
-                                  },
-                                  child: selectedProduct.contains(index)
-                                      ? Icon(Icons.check_box_outlined)
-                                      : Icon(Icons
-                                          .check_box_outline_blank_outlined)),
-                              Text('$index'),
-                              Padding(
-                                padding: const EdgeInsets.symmetric(
-                                    horizontal: 28.0),
-                                child: Container(
-                                    height: publicProvider.isWindows
-                                        ? size.height * .04
-                                        : size.width * .04,
-                                    width: publicProvider.isWindows
-                                        ? size.height * .03
-                                        : size.width * .03,
-                                    child:
-                                        _filteredList[index].studentImageUrl !=
-                                                    null &&
-                                                _filteredList[index]
-                                                    .studentImageUrl!
-                                                    .isNotEmpty
-                                            ? Image.network(
-                                                _filteredList[index]
-                                                    .studentImageUrl!,
-                                                fit: BoxFit.fill,
-                                              )
-                                            : Container()),
-                              ),
-                              Expanded(
-                                child: Text(
-                                  '${_filteredList[index].studentName}',
-                                  textAlign: TextAlign.center,
-                                  style: TextStyle(
-                                    fontSize: publicProvider.isWindows
-                                        ? size.height * .02
-                                        : size.width * .02,
-                                  ),
-                                ),
-                              ),
-                              Expanded(
-                                child: Text(
-                                  '${_filteredList[index].fatherName}',
-                                  textAlign: TextAlign.center,
-                                  style: TextStyle(
-                                    fontSize: publicProvider.isWindows
-                                        ? size.height * .02
-                                        : size.width * .02,
-                                  ),
-                                ),
-                              ),
-                              Expanded(
-                                child: Text(
-                                  '${_filteredList[index].phoneNo}\n${_filteredList[index].email}',
-                                  textAlign: TextAlign.center,
-                                  style: TextStyle(
-                                    fontSize: publicProvider.isWindows
-                                        ? size.height * .02
-                                        : size.width * .02,
-                                  ),
-                                ),
-                              ),
-                              Expanded(
-                                child: Text(
-                                  '${_filteredList[index].admittedClass}',
-                                  textAlign: TextAlign.center,
-                                  style: TextStyle(
-                                    fontSize: publicProvider.isWindows
-                                        ? size.height * .02
-                                        : size.width * .02,
-                                  ),
-                                ),
-                              ),
-                              Expanded(
-                                child: Text(
-                                  '${_filteredList[index].section}',
-                                  textAlign: TextAlign.center,
-                                  style: TextStyle(
-                                    fontSize: publicProvider.isWindows
-                                        ? size.height * .02
-                                        : size.width * .02,
-                                  ),
-                                ),
-                              ),
-                              Expanded(
-                                child: Column(
-                                  mainAxisAlignment: MainAxisAlignment.start,
-                                  children: [
-                                    InkWell(
-                                      onTap: () {
-                                        setState(() {
-                                          firebaseProvider.productIndex = index;
-                                        });
-
-                                        showDialog(
-                                            context: context,
-                                            builder: (_) {
-                                              return AlertDialog(
-                                                title: Text('Product Details'),
-                                                content: Container(
-                                                    height:
-                                                        publicProvider.isWindows
-                                                            ? size.height * .6
-                                                            : size.width * .6,
-                                                    width:
-                                                        publicProvider.isWindows
-                                                            ? size.height
-                                                            : size.width * .8,
-                                                    child: ListView(
-                                                      children: [
-                                                        publicProvider.isWindows
-                                                            ? Row(
-                                                                mainAxisAlignment:
-                                                                    MainAxisAlignment
-                                                                        .center,
-                                                                crossAxisAlignment:
-                                                                    CrossAxisAlignment
-                                                                        .start,
-                                                                children: [
-                                                                  Container(
-                                                                      width: publicProvider.isWindows
-                                                                          ? size.height /
-                                                                              2
-                                                                          : size.width *
-                                                                              .8 /
-                                                                              2,
-                                                                      child: productImageList(
-                                                                          publicProvider,
-                                                                          size,
-                                                                          index,
-                                                                          firebaseProvider)),
-                                                                  Container(
-                                                                      width: publicProvider.isWindows
-                                                                          ? size.height /
-                                                                              2
-                                                                          : size.width *
-                                                                              .8 /
-                                                                              2,
-                                                                      child: productDetailsData(
-                                                                          publicProvider,
-                                                                          firebaseProvider,
-                                                                          index,
-                                                                          size))
-                                                                ],
-                                                              )
-                                                            : Column(
-                                                                mainAxisAlignment:
-                                                                    MainAxisAlignment
-                                                                        .center,
-                                                                crossAxisAlignment:
-                                                                    CrossAxisAlignment
-                                                                        .center,
-                                                                children: [
-                                                                  Container(
-                                                                      width:
-                                                                          publicProvider.pageWidth(size) *
-                                                                              .5,
-                                                                      child: productImageList(
-                                                                          publicProvider,
-                                                                          size,
-                                                                          index,
-                                                                          firebaseProvider)),
-                                                                  productDetailsData(
-                                                                      publicProvider,
-                                                                      firebaseProvider,
-                                                                      index,
-                                                                      size)
-                                                                ],
-                                                              ),
-                                                      ],
-                                                    )),
-                                                actions: <Widget>[
-                                                  TextButton(
-                                                    child: Text('Cancel'),
-                                                    onPressed: () {
-                                                      Navigator.of(context)
-                                                          .pop();
-                                                    },
-                                                  ),
-                                                ],
-                                              );
-                                            });
-                                      },
-                                      child: Padding(
-                                        padding: const EdgeInsets.all(8.0),
-                                        child: Icon(
-                                          Icons.visibility,
-                                          size: publicProvider.isWindows
-                                              ? size.height * .02
-                                              : size.width * .02,
-                                          color: Colors.green,
-                                        ),
-                                      ),
-                                    ),
-                                  ],
-                                ),
-                              ),
-                            ],
-                          ),
-                        ],
-                      ),
+                    return Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        InkWell(
+                          onTap: () {
+                            setState(() {
+                              // if (selectedProduct.contains(index)) {
+                              //   selectedProductID
+                              //       .remove(_filteredList[index].id);
+                              //   selectedProduct.remove(index);
+                              // } else {
+                              //   selectedProductID
+                              //       .add(_filteredList[index].id);
+                              //   selectedProduct.add(index);
+                              // }
+                            });
+                          },
+                          // child: selectedProduct.contains(index)
+                          //     ? Icon(Icons.check_box_outlined)
+                          //     : Icon(
+                          //         Icons.check_box_outline_blank_outlined),
+                        ),
+                        Text('${_filteredList[index].studentName}'),
+                        Padding(
+                          padding: const EdgeInsets.symmetric(horizontal: 28.0),
+                          child: Container(
+                              height: publicProvider.isWindows
+                                  ? size.height * .04
+                                  : size.width * .04,
+                              width: publicProvider.isWindows
+                                  ? size.height * .03
+                                  : size.width * .03,
+                              child: _filteredList[index].studentImageUrl !=
+                                          null &&
+                                      _filteredList[index]
+                                          .studentImageUrl!
+                                          .isNotEmpty
+                                  ? Image.network(
+                                      _filteredList[index].studentImageUrl!,
+                                      fit: BoxFit.fill,
+                                    )
+                                  : Container()),
+                        ),
+                        // Expanded(
+                        //   child: Text(
+                        //     '${_filteredList[index].studentName}',
+                        //     textAlign: TextAlign.center,
+                        //     style: TextStyle(
+                        //       fontSize: publicProvider.isWindows
+                        //           ? size.height * .02
+                        //           : size.width * .02,
+                        //     ),
+                        //   ),
+                        // ),
+                        // Expanded(
+                        //   child: Text(
+                        //     '${_filteredList[index].fatherName}',
+                        //     textAlign: TextAlign.center,
+                        //     style: TextStyle(
+                        //       fontSize: publicProvider.isWindows
+                        //           ? size.height * .02
+                        //           : size.width * .02,
+                        //     ),
+                        //   ),
+                        // ),
+                        // Expanded(
+                        //   child: Text(
+                        //     '${_filteredList[index].phoneNo}\n${_filteredList[index].email}',
+                        //     textAlign: TextAlign.center,
+                        //     style: TextStyle(
+                        //       fontSize: publicProvider.isWindows
+                        //           ? size.height * .02
+                        //           : size.width * .02,
+                        //     ),
+                        //   ),
+                        // ),
+                        // Expanded(
+                        //   child: Text(
+                        //     '${_filteredList[index].admittedClass}',
+                        //     textAlign: TextAlign.center,
+                        //     style: TextStyle(
+                        //       fontSize: publicProvider.isWindows
+                        //           ? size.height * .02
+                        //           : size.width * .02,
+                        //     ),
+                        //   ),
+                        // ),
+                        // Expanded(
+                        //   child: Text(
+                        //     '${_filteredList[index].section}',
+                        //     textAlign: TextAlign.center,
+                        //     style: TextStyle(
+                        //       fontSize: publicProvider.isWindows
+                        //           ? size.height * .02
+                        //           : size.width * .02,
+                        //     ),
+                        //   ),
+                        // ),
+                        // Expanded(
+                        //   child: Column(
+                        //     mainAxisAlignment: MainAxisAlignment.start,
+                        //     children: [
+                        //       InkWell(
+                        //         onTap: () {
+                        //           // setState(() {
+                        //           //   firebaseProvider.productIndex = index;
+                        //           // });
+                        //           //
+                        //           // showDialog(
+                        //           //     context: context,
+                        //           //     builder: (_) {
+                        //           //       return AlertDialog(
+                        //           //         title: Text('Product Details'),
+                        //           //         content: Container(
+                        //           //             height:
+                        //           //                 publicProvider.isWindows
+                        //           //                     ? size.height * .6
+                        //           //                     : size.width * .6,
+                        //           //             width:
+                        //           //                 publicProvider.isWindows
+                        //           //                     ? size.height
+                        //           //                     : size.width * .8,
+                        //           //             child: ListView(
+                        //           //               children: [
+                        //           //                 publicProvider.isWindows
+                        //           //                     ? Row(
+                        //           //                         mainAxisAlignment:
+                        //           //                             MainAxisAlignment
+                        //           //                                 .center,
+                        //           //                         crossAxisAlignment:
+                        //           //                             CrossAxisAlignment
+                        //           //                                 .start,
+                        //           //                         children: [
+                        //           //                           Container(
+                        //           //                               width: publicProvider.isWindows
+                        //           //                                   ? size.height /
+                        //           //                                       2
+                        //           //                                   : size.width *
+                        //           //                                       .8 /
+                        //           //                                       2,
+                        //           //                               child: productImageList(
+                        //           //                                   publicProvider,
+                        //           //                                   size,
+                        //           //                                   index,
+                        //           //                                   firebaseProvider)),
+                        //           //                           Container(
+                        //           //                               width: publicProvider.isWindows
+                        //           //                                   ? size.height /
+                        //           //                                       2
+                        //           //                                   : size.width *
+                        //           //                                       .8 /
+                        //           //                                       2,
+                        //           //                               child: productDetailsData(
+                        //           //                                   publicProvider,
+                        //           //                                   firebaseProvider,
+                        //           //                                   index,
+                        //           //                                   size))
+                        //           //                         ],
+                        //           //                       )
+                        //           //                     : Column(
+                        //           //                         mainAxisAlignment:
+                        //           //                             MainAxisAlignment
+                        //           //                                 .center,
+                        //           //                         crossAxisAlignment:
+                        //           //                             CrossAxisAlignment
+                        //           //                                 .center,
+                        //           //                         children: [
+                        //           //                           Container(
+                        //           //                               width:
+                        //           //                                   publicProvider.pageWidth(size) *
+                        //           //                                       .5,
+                        //           //                               child: productImageList(
+                        //           //                                   publicProvider,
+                        //           //                                   size,
+                        //           //                                   index,
+                        //           //                                   firebaseProvider)),
+                        //           //                           productDetailsData(
+                        //           //                               publicProvider,
+                        //           //                               firebaseProvider,
+                        //           //                               index,
+                        //           //                               size)
+                        //           //                         ],
+                        //           //                       ),
+                        //           //               ],
+                        //           //             )),
+                        //           //         actions: <Widget>[
+                        //           //           TextButton(
+                        //           //             child: Text('Cancel'),
+                        //           //             onPressed: () {
+                        //           //               Navigator.of(context)
+                        //           //                   .pop();
+                        //           //             },
+                        //           //           ),
+                        //           //         ],
+                        //           //       );
+                        //           //     });
+                        //         },
+                        //         child: Padding(
+                        //           padding: const EdgeInsets.all(8.0),
+                        //           child: Icon(
+                        //             Icons.visibility,
+                        //             size: publicProvider.isWindows
+                        //                 ? size.height * .02
+                        //                 : size.width * .02,
+                        //             color: Colors.green,
+                        //           ),
+                        //         ),
+                        //       ),
+                        //     ],
+                        //   ),
+                        // ),
+                      ],
                     );
                   })
-        ],
-      ),
-    );
-  }
-
-  Widget productImageList(PublicProvider publicProvider, Size size, int index,
-      FirebaseProvider firebaseProvider) {
-    return Padding(
-      padding: const EdgeInsets.all(8.0),
-      child: Column(
-        mainAxisAlignment: MainAxisAlignment.center,
-        children: [
-          SizedBox(
-            height: 20,
-          ),
-          Stack(children: [
-            Container(
-              // width: size.height*.4,
-              height:
-                  publicProvider.isWindows ? size.height * .4 : size.width * .4,
-              decoration: BoxDecoration(
-                  borderRadius: BorderRadius.all(Radius.circular(10)),
-                  border: Border.all(width: 1, color: Colors.grey)),
-              child: firebaseProvider.studentList[index].image.isNotEmpty
-                  ? Container(
-                      child: Image.network(
-                        firebaseProvider
-                            .studentList[index].image[_currentIndex],
-                        fit: BoxFit.cover,
-                      ),
-                    )
-                  : Container(),
-            ),
-          ]),
-          Container(
-            height:
-                publicProvider.isWindows ? size.height * .15 : size.width * .15,
-            width: publicProvider.isWindows
-                ? size.height / 2
-                : size.width * .8 / 2,
-            child: ListView.builder(
-                scrollDirection: Axis.horizontal,
-                shrinkWrap: true,
-                itemCount: firebaseProvider.studentList[index].image.length == 0
-                    ? 3
-                    : firebaseProvider.studentList[index].image.length,
-                itemBuilder: (BuildContext ctx, indx) {
-                  return Padding(
-                    padding: const EdgeInsets.all(8.0),
-                    child: InkWell(
-                      onTap: () {
-                        setState(() {
-                          _currentIndex = indx;
-                        });
-                      },
-                      child: firebaseProvider
-                              .studentList[index].image.isNotEmpty
-                          ? Container(
-                              width: publicProvider.isWindows
-                                  ? size.height * .2
-                                  : size.width * .2,
-                              height: publicProvider.isWindows
-                                  ? size.height * .2
-                                  : size.width * .2,
-                              decoration: BoxDecoration(
-                                  borderRadius:
-                                      BorderRadius.all(Radius.circular(10)),
-                                  border:
-                                      Border.all(width: 1, color: Colors.grey)),
-                              alignment: Alignment.center,
-                              child: Image.network(
-                                firebaseProvider.studentList[index].image[indx],
-                                fit: BoxFit.fill,
-                              ))
-                          : Container(
-                              width: publicProvider.isWindows
-                                  ? size.height * .2
-                                  : size.width * .2,
-                              decoration: BoxDecoration(
-                                  borderRadius:
-                                      BorderRadius.all(Radius.circular(10)),
-                                  border:
-                                      Border.all(width: 1, color: Colors.grey)),
-                              height: 200,
-                            ),
-                    ),
-                  );
-                }),
-          ),
         ],
       ),
     );

@@ -3,7 +3,6 @@ import 'package:data_table_2/paginated_data_table_2.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:institute_manager_admin_pannel/constants.dart';
-import 'package:institute_manager_admin_pannel/model/RecentFile.dart';
 
 class StudentTeacherList extends StatefulWidget {
   const StudentTeacherList({
@@ -57,59 +56,59 @@ class _StudentTeacherListState extends State<StudentTeacherList> {
               ),
             ],
           ),
-          SizedBox(
-            width: double.infinity,
-            child: DataTable2(
-              columnSpacing: defaultPadding,
-              minWidth: 600,
-              columns: const [
-                DataColumn(
-                  label: Text("Name"),
-                ),
-                DataColumn(
-                  label: Text("Address"),
-                ),
-                DataColumn(
-                  label: Text("Phone"),
-                ),
-              ],
-              rows: selectStudent == true
-                  ? List.generate(
-                      student_list_file.length,
-                      (index) => recentFileDataRow(student_list_file[index]),
-                    )
-                  : List.generate(
-                      teacher_list_file.length,
-                      (index) => recentFileDataRow(teacher_list_file[index]),
-                    ),
-            ),
-          ),
+          // SizedBox(
+          //   width: double.infinity,
+          //   child: DataTable2(
+          //     columnSpacing: defaultPadding,
+          //     minWidth: 600,
+          //     columns: const [
+          //       DataColumn(
+          //         label: Text("Name"),
+          //       ),
+          //       DataColumn(
+          //         label: Text("Address"),
+          //       ),
+          //       DataColumn(
+          //         label: Text("Phone"),
+          //       ),
+          //     ],
+          //     rows: selectStudent == true
+          //         ? List.generate(
+          //             student_list_file.length,
+          //             (index) => recentFileDataRow(student_list_file[index]),
+          //           )
+          //         : List.generate(
+          //             teacher_list_file.length,
+          //             (index) => recentFileDataRow(teacher_list_file[index]),
+          //           ),
+          //   ),
+          // ),
         ],
       ),
     );
   }
 }
 
-DataRow recentFileDataRow(InfoList infoList) {
-  return DataRow(
-    cells: [
-      DataCell(
-        Row(
-          children: [
-            SvgPicture.asset(
-              infoList.icon!,
-              height: 30,
-              width: 30,
-            ),
-            Padding(
-              padding: const EdgeInsets.symmetric(horizontal: defaultPadding),
-              child: Text(infoList.name!),
-            ),
-          ],
-        ),
-      ),
-      DataCell(Text(infoList.address!)),
-      DataCell(Text(infoList.phone!)),
-    ],
-  );
-}
+// DataRow recentFileDataRow(InfoList infoList) {
+//   return DataRow(
+//     cells: [
+//       DataCell(
+//         Row(
+//           children: [
+//             SvgPicture.asset(
+//               infoList.icon!,
+//               height: 30,
+//               width: 30,
+//             ),
+//             Padding(
+//               padding: const EdgeInsets.symmetric(horizontal: defaultPadding),
+//               child: Text(infoList.name!),
+//             ),
+//           ],
+//         ),
+//       ),
+//       DataCell(Text(infoList.address!)),
+//       DataCell(Text(infoList.phone!)),
+//     ],
+//   );
+// }
