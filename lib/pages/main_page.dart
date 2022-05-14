@@ -21,36 +21,12 @@ class _MainPageState extends State<MainPage> {
 
   int counter = 0;
 
-  _customInit(FirebaseProvider firebaseProvider) async {
-    counter++;
-    await firebaseProvider.getAdminData();
-    await firebaseProvider.getRate();
-    await firebaseProvider.getUser();
-    await firebaseProvider.getCategory();
-    await firebaseProvider.getSubCategory();
-    await firebaseProvider.getStudents();
-    await firebaseProvider.getPackage();
-    await firebaseProvider.getAreaHub();
-    await firebaseProvider.getWithdrawRequest();
-    await firebaseProvider.getDepositRequest();
-    await firebaseProvider.getInsurancePendingRequest();
-    await firebaseProvider.getInsuranceTransferredRequest();
-    await firebaseProvider.getSoldPackage();
-    await firebaseProvider.getProductOrder();
-    await firebaseProvider.getPackageRequest();
-    // firebaseProvider.getDepositHistory('01929444532');
-    await firebaseProvider.getVideo();
-    await firebaseProvider.getAdminData();
-  }
-
   @override
   Widget build(BuildContext context) {
     final Size size = MediaQuery.of(context).size;
     final PublicProvider publicProvider = Provider.of<PublicProvider>(context);
     final FirebaseProvider firebaseProvider =
         Provider.of<FirebaseProvider>(context);
-    // if (counter == 0) _customInit(firebaseProvider);
-
     if ((defaultTargetPlatform == TargetPlatform.iOS) ||
         (defaultTargetPlatform == TargetPlatform.android)) {
       setState(() {

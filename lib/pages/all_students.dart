@@ -1,6 +1,7 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
+import 'package:institute_manager_admin_pannel/constants.dart';
 import 'package:institute_manager_admin_pannel/controller/data_fetcher.dart';
 import 'package:institute_manager_admin_pannel/model/provider_model/data.dart';
 import 'package:institute_manager_admin_pannel/model/provider_model/firebase_provider.dart';
@@ -10,6 +11,7 @@ import 'package:institute_manager_admin_pannel/model/data_model/student_model.da
 import 'package:institute_manager_admin_pannel/model/data_model/sub_category_model.dart';
 import 'package:institute_manager_admin_pannel/pages/custom_widget/fading_circle.dart';
 import 'package:institute_manager_admin_pannel/pages/custom_widget/form_decoration.dart';
+import 'package:institute_manager_admin_pannel/variables.dart';
 import 'package:provider/provider.dart';
 
 class AllStudent extends StatefulWidget {
@@ -21,6 +23,7 @@ class AllStudent extends StatefulWidget {
 
 class _AllStudentState extends State<AllStudent> {
   final DataFetcher _dataFetcher = DataFetcher();
+  final Variables _variables = Variables();
   List<StudentModel>? students;
   List<StudentModel> _filteredList = [];
 
@@ -57,13 +60,13 @@ class _AllStudentState extends State<AllStudent> {
   // // List<CategoryModel> caterorys = [];
   // // List<SubCategoryModel> subCategorys = [];
   //
-  // List selectedProduct = []; //selected product for check
-  // List selectedProductID = []; //selected product ID for Delete
+  List selectedStudent = []; //selected product for check
+  List selectedProductID = []; //selected product ID for Delete
   //
   // final List<String> imgList = [];
   // int _currentIndex = 0;
   // int counter = 0;
-  List<StudentModel> _subList = [];
+  // List<StudentModel> _subList = [];
 
   // _customInit(FirebaseProvider firebaseProvider) async {
   //   setState(() {
@@ -119,7 +122,7 @@ class _AllStudentState extends State<AllStudent> {
               child: TextField(
                 controller: searchTextController,
                 decoration: textFieldFormDecoration(size).copyWith(
-                  hintText: 'Search Product By Title',
+                  hintText: 'Search Product By Name',
                   hintStyle: TextStyle(
                     fontSize: publicProvider.isWindows
                         ? size.height * .02
@@ -349,218 +352,386 @@ class _AllStudentState extends State<AllStudent> {
                   padding: const EdgeInsets.all(8),
                   itemCount: _filteredList.length,
                   itemBuilder: (BuildContext context, int index) {
-                    return Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: [
-                        InkWell(
-                          onTap: () {
-                            setState(() {
-                              // if (selectedProduct.contains(index)) {
-                              //   selectedProductID
-                              //       .remove(_filteredList[index].id);
-                              //   selectedProduct.remove(index);
-                              // } else {
-                              //   selectedProductID
-                              //       .add(_filteredList[index].id);
-                              //   selectedProduct.add(index);
-                              // }
-                            });
-                          },
-                          // child: selectedProduct.contains(index)
-                          //     ? Icon(Icons.check_box_outlined)
-                          //     : Icon(
-                          //         Icons.check_box_outline_blank_outlined),
-                        ),
-                        Text('${_filteredList[index].studentName}'),
-                        Padding(
-                          padding: const EdgeInsets.symmetric(horizontal: 28.0),
-                          child: Container(
-                              height: publicProvider.isWindows
-                                  ? size.height * .04
-                                  : size.width * .04,
-                              width: publicProvider.isWindows
-                                  ? size.height * .03
-                                  : size.width * .03,
-                              child: _filteredList[index].studentImageUrl !=
-                                          null &&
-                                      _filteredList[index]
-                                          .studentImageUrl!
-                                          .isNotEmpty
-                                  ? Image.network(
-                                      _filteredList[index].studentImageUrl!,
-                                      fit: BoxFit.fill,
-                                    )
-                                  : Container()),
-                        ),
-                        // Expanded(
-                        //   child: Text(
-                        //     '${_filteredList[index].studentName}',
-                        //     textAlign: TextAlign.center,
-                        //     style: TextStyle(
-                        //       fontSize: publicProvider.isWindows
-                        //           ? size.height * .02
-                        //           : size.width * .02,
-                        //     ),
-                        //   ),
-                        // ),
-                        // Expanded(
-                        //   child: Text(
-                        //     '${_filteredList[index].fatherName}',
-                        //     textAlign: TextAlign.center,
-                        //     style: TextStyle(
-                        //       fontSize: publicProvider.isWindows
-                        //           ? size.height * .02
-                        //           : size.width * .02,
-                        //     ),
-                        //   ),
-                        // ),
-                        // Expanded(
-                        //   child: Text(
-                        //     '${_filteredList[index].phoneNo}\n${_filteredList[index].email}',
-                        //     textAlign: TextAlign.center,
-                        //     style: TextStyle(
-                        //       fontSize: publicProvider.isWindows
-                        //           ? size.height * .02
-                        //           : size.width * .02,
-                        //     ),
-                        //   ),
-                        // ),
-                        // Expanded(
-                        //   child: Text(
-                        //     '${_filteredList[index].admittedClass}',
-                        //     textAlign: TextAlign.center,
-                        //     style: TextStyle(
-                        //       fontSize: publicProvider.isWindows
-                        //           ? size.height * .02
-                        //           : size.width * .02,
-                        //     ),
-                        //   ),
-                        // ),
-                        // Expanded(
-                        //   child: Text(
-                        //     '${_filteredList[index].section}',
-                        //     textAlign: TextAlign.center,
-                        //     style: TextStyle(
-                        //       fontSize: publicProvider.isWindows
-                        //           ? size.height * .02
-                        //           : size.width * .02,
-                        //     ),
-                        //   ),
-                        // ),
-                        // Expanded(
-                        //   child: Column(
-                        //     mainAxisAlignment: MainAxisAlignment.start,
-                        //     children: [
-                        //       InkWell(
-                        //         onTap: () {
-                        //           // setState(() {
-                        //           //   firebaseProvider.productIndex = index;
-                        //           // });
-                        //           //
-                        //           // showDialog(
-                        //           //     context: context,
-                        //           //     builder: (_) {
-                        //           //       return AlertDialog(
-                        //           //         title: Text('Product Details'),
-                        //           //         content: Container(
-                        //           //             height:
-                        //           //                 publicProvider.isWindows
-                        //           //                     ? size.height * .6
-                        //           //                     : size.width * .6,
-                        //           //             width:
-                        //           //                 publicProvider.isWindows
-                        //           //                     ? size.height
-                        //           //                     : size.width * .8,
-                        //           //             child: ListView(
-                        //           //               children: [
-                        //           //                 publicProvider.isWindows
-                        //           //                     ? Row(
-                        //           //                         mainAxisAlignment:
-                        //           //                             MainAxisAlignment
-                        //           //                                 .center,
-                        //           //                         crossAxisAlignment:
-                        //           //                             CrossAxisAlignment
-                        //           //                                 .start,
-                        //           //                         children: [
-                        //           //                           Container(
-                        //           //                               width: publicProvider.isWindows
-                        //           //                                   ? size.height /
-                        //           //                                       2
-                        //           //                                   : size.width *
-                        //           //                                       .8 /
-                        //           //                                       2,
-                        //           //                               child: productImageList(
-                        //           //                                   publicProvider,
-                        //           //                                   size,
-                        //           //                                   index,
-                        //           //                                   firebaseProvider)),
-                        //           //                           Container(
-                        //           //                               width: publicProvider.isWindows
-                        //           //                                   ? size.height /
-                        //           //                                       2
-                        //           //                                   : size.width *
-                        //           //                                       .8 /
-                        //           //                                       2,
-                        //           //                               child: productDetailsData(
-                        //           //                                   publicProvider,
-                        //           //                                   firebaseProvider,
-                        //           //                                   index,
-                        //           //                                   size))
-                        //           //                         ],
-                        //           //                       )
-                        //           //                     : Column(
-                        //           //                         mainAxisAlignment:
-                        //           //                             MainAxisAlignment
-                        //           //                                 .center,
-                        //           //                         crossAxisAlignment:
-                        //           //                             CrossAxisAlignment
-                        //           //                                 .center,
-                        //           //                         children: [
-                        //           //                           Container(
-                        //           //                               width:
-                        //           //                                   publicProvider.pageWidth(size) *
-                        //           //                                       .5,
-                        //           //                               child: productImageList(
-                        //           //                                   publicProvider,
-                        //           //                                   size,
-                        //           //                                   index,
-                        //           //                                   firebaseProvider)),
-                        //           //                           productDetailsData(
-                        //           //                               publicProvider,
-                        //           //                               firebaseProvider,
-                        //           //                               index,
-                        //           //                               size)
-                        //           //                         ],
-                        //           //                       ),
-                        //           //               ],
-                        //           //             )),
-                        //           //         actions: <Widget>[
-                        //           //           TextButton(
-                        //           //             child: Text('Cancel'),
-                        //           //             onPressed: () {
-                        //           //               Navigator.of(context)
-                        //           //                   .pop();
-                        //           //             },
-                        //           //           ),
-                        //           //         ],
-                        //           //       );
-                        //           //     });
-                        //         },
-                        //         child: Padding(
-                        //           padding: const EdgeInsets.all(8.0),
-                        //           child: Icon(
-                        //             Icons.visibility,
-                        //             size: publicProvider.isWindows
-                        //                 ? size.height * .02
-                        //                 : size.width * .02,
-                        //             color: Colors.green,
-                        //           ),
-                        //         ),
-                        //       ),
-                        //     ],
-                        //   ),
-                        // ),
-                      ],
+                    return Container(
+                      child: Column(
+                        children: [
+                          Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            children: [
+                              InkWell(
+                                onTap: () {
+                                  setState(() {
+                                    if (selectedStudent.contains(index)) {
+                                      selectedProductID
+                                          .remove(_filteredList[index].id);
+                                      selectedStudent.remove(index);
+                                    } else {
+                                      selectedProductID
+                                          .add(_filteredList[index].id);
+                                      selectedStudent.add(index);
+                                    }
+                                  });
+                                },
+                                child: selectedStudent.contains(index)
+                                    ? Icon(Icons.check_box_outlined)
+                                    : Icon(
+                                        Icons.check_box_outline_blank_outlined),
+                              ),
+                              Padding(
+                                padding: const EdgeInsets.symmetric(
+                                    horizontal: 28.0),
+                                child: Container(
+                                    height: publicProvider.isWindows
+                                        ? size.height * .04
+                                        : size.width * .04,
+                                    width: publicProvider.isWindows
+                                        ? size.height * .03
+                                        : size.width * .03,
+                                    child:
+                                        _filteredList[index].studentImageUrl !=
+                                                    null &&
+                                                _filteredList[index]
+                                                    .studentImageUrl!
+                                                    .isNotEmpty
+                                            ? Image.network(
+                                                _filteredList[index]
+                                                    .studentImageUrl!,
+                                                fit: BoxFit.fill,
+                                              )
+                                            : Container()),
+                              ),
+                              Expanded(
+                                child: Text(
+                                  '${_filteredList[index].studentName}',
+                                  textAlign: TextAlign.center,
+                                  style: TextStyle(
+                                    fontSize: publicProvider.isWindows
+                                        ? size.height * .02
+                                        : size.width * .02,
+                                  ),
+                                ),
+                              ),
+                              Expanded(
+                                child: Text(
+                                  '${_filteredList[index].fatherName}',
+                                  textAlign: TextAlign.center,
+                                  style: TextStyle(
+                                    fontSize: publicProvider.isWindows
+                                        ? size.height * .02
+                                        : size.width * .02,
+                                  ),
+                                ),
+                              ),
+                              Expanded(
+                                child: Text(
+                                  '${_filteredList[index].phoneNo}\n${_filteredList[index].email}',
+                                  textAlign: TextAlign.center,
+                                  style: TextStyle(
+                                    fontSize: publicProvider.isWindows
+                                        ? size.height * .02
+                                        : size.width * .02,
+                                  ),
+                                ),
+                              ),
+                              Expanded(
+                                child: Text(
+                                  '${_filteredList[index].admittedClass}',
+                                  textAlign: TextAlign.center,
+                                  style: TextStyle(
+                                    fontSize: publicProvider.isWindows
+                                        ? size.height * .02
+                                        : size.width * .02,
+                                  ),
+                                ),
+                              ),
+                              Expanded(
+                                child: Text(
+                                  '${_filteredList[index].section}',
+                                  textAlign: TextAlign.center,
+                                  style: TextStyle(
+                                    fontSize: publicProvider.isWindows
+                                        ? size.height * .02
+                                        : size.width * .02,
+                                  ),
+                                ),
+                              ),
+                              Expanded(
+                                child: Column(
+                                  mainAxisAlignment: MainAxisAlignment.start,
+                                  children: [
+                                    InkWell(
+                                      onTap: () {
+                                        setState(() {
+                                          _variables.productIndex = index;
+                                        });
+
+                                        showDialog(
+                                            context: context,
+                                            builder: (_) {
+                                              return AlertDialog(
+                                                title: const Text(
+                                                    'Student Details'),
+                                                content: Container(
+                                                    height:
+                                                        publicProvider.isWindows
+                                                            ? size.height * .6
+                                                            : size.width * .6,
+                                                    width:
+                                                        publicProvider.isWindows
+                                                            ? size.height
+                                                            : size.width * .8,
+                                                    child: ListView(
+                                                      children: [
+                                                        publicProvider.isWindows
+                                                            ? Row(
+                                                                mainAxisAlignment:
+                                                                    MainAxisAlignment
+                                                                        .center,
+                                                                crossAxisAlignment:
+                                                                    CrossAxisAlignment
+                                                                        .start,
+                                                                children: [
+                                                                  Container(
+                                                                    height: publicProvider
+                                                                            .isWindows
+                                                                        ? size.height *
+                                                                            .5
+                                                                        : size.width *
+                                                                            .5,
+                                                                    color: Colors
+                                                                        .grey
+                                                                        .shade100,
+                                                                    child:
+                                                                        Padding(
+                                                                      padding:
+                                                                          const EdgeInsets.all(
+                                                                              8.0),
+                                                                      child:
+                                                                          Column(
+                                                                        mainAxisAlignment:
+                                                                            MainAxisAlignment.start,
+                                                                        crossAxisAlignment:
+                                                                            CrossAxisAlignment.start,
+                                                                        children: [
+                                                                          Row(
+                                                                            mainAxisAlignment:
+                                                                                MainAxisAlignment.center,
+                                                                            children: [
+                                                                              Container(
+                                                                                height: 70,
+                                                                                width: 70,
+                                                                                decoration: const BoxDecoration(
+                                                                                  shape: BoxShape.circle,
+                                                                                  color: IMColors.primaryColor,
+                                                                                ),
+                                                                                child: Center(
+                                                                                  child: Padding(
+                                                                                    padding: const EdgeInsets.all(8.0),
+                                                                                    child: Text(
+                                                                                      _filteredList[index].studentType!,
+                                                                                      style: IMTextStyle.IMBodytext,
+                                                                                    ),
+                                                                                  ),
+                                                                                ),
+                                                                              ),
+                                                                              // _filteredList[index].studentImageUrl!.isNotEmpty
+                                                                              //     ? Image.network(
+                                                                              //         _filteredList[index].studentImageUrl!,
+                                                                              //         height: size.height / 2,
+                                                                              //         width: size.height / 2,
+                                                                              //       )
+                                                                              //     : SizedBox(),
+                                                                              Container(
+                                                                                height: 70,
+                                                                                width: 70,
+                                                                                decoration: BoxDecoration(
+                                                                                  shape: BoxShape.circle,
+                                                                                  color: IMColors.primaryColor,
+                                                                                ),
+                                                                                child: Center(
+                                                                                  child: Padding(
+                                                                                    padding: const EdgeInsets.all(8.0),
+                                                                                    child: Text(
+                                                                                      _filteredList[index].status!,
+                                                                                      style: IMTextStyle.IMBodytext,
+                                                                                    ),
+                                                                                  ),
+                                                                                ),
+                                                                              ),
+                                                                            ],
+                                                                          ),
+                                                                          Text(
+                                                                            'Name: ${_filteredList[index].studentName!}',
+                                                                            style:
+                                                                                IMTextStyle.IMSubHeader,
+                                                                          ),
+                                                                          Text(
+                                                                            'Father: ${_filteredList[index].fatherName!}',
+                                                                          ),
+                                                                          Text(
+                                                                            'Guardian: ${_filteredList[index].guardianName!} (${_filteredList[index].guardianRelation!})',
+                                                                          ),
+                                                                          Text(
+                                                                            'Class: ${_filteredList[index].admittedClass!}',
+                                                                          ),
+                                                                          Text(
+                                                                            'Section: ${_filteredList[index].section!}',
+                                                                          ),
+                                                                          Text(
+                                                                            'Brunch: ${_filteredList[index].branch!}',
+                                                                          ),
+                                                                          Text(
+                                                                            'Email: ${_filteredList[index].email!}',
+                                                                          ),
+                                                                          Text(
+                                                                            'Phone: ${_filteredList[index].phoneNo!}',
+                                                                          ),
+                                                                          Text(
+                                                                            'Date of Birth: ${_filteredList[index].dOB!}',
+                                                                          ),
+                                                                        ],
+                                                                      ),
+                                                                    ),
+                                                                  ),
+                                                                  const SizedBox(
+                                                                      width:
+                                                                          50),
+                                                                  Column(
+                                                                    mainAxisAlignment:
+                                                                        MainAxisAlignment
+                                                                            .start,
+                                                                    crossAxisAlignment:
+                                                                        CrossAxisAlignment
+                                                                            .start,
+                                                                    children: [
+                                                                      // Row(
+                                                                      //   mainAxisAlignment:
+                                                                      //       MainAxisAlignment.spaceBetween,
+                                                                      //   children: [
+                                                                      //     _filteredList[index].parent1ImageUrl!.isNotEmpty
+                                                                      //         ? Image.network(
+                                                                      //             students![index].parent1ImageUrl!,
+                                                                      //             height: size.height / 1,
+                                                                      //             width: size.height / 1,
+                                                                      //           )
+                                                                      //         : const SizedBox(),
+                                                                      //     _filteredList[index].parent2ImageUrl!.isNotEmpty
+                                                                      //         ? Image.network(
+                                                                      //             _filteredList[index].parent2ImageUrl!,
+                                                                      //             height: size.height / 1,
+                                                                      //             width: size.height / 1,
+                                                                      //           )
+                                                                      //         : SizedBox(),
+                                                                      //     _filteredList[index].nIDImageUrl!.isNotEmpty
+                                                                      //         ? Image.network(
+                                                                      //             _filteredList[index].nIDImageUrl!,
+                                                                      //             height: size.height / 1,
+                                                                      //             width: size.height / 1,
+                                                                      //           )
+                                                                      //         : SizedBox(),
+                                                                      //     _filteredList[index].bcImageUrl!.isNotEmpty
+                                                                      //         ? Image.network(
+                                                                      //             _filteredList[index].bcImageUrl!,
+                                                                      //             height: size.height / 1,
+                                                                      //             width: size.height / 1,
+                                                                      //           )
+                                                                      //         : SizedBox(),
+                                                                      //     _filteredList[index].tcImageUrl!.isNotEmpty
+                                                                      //         ? Image.network(
+                                                                      //             _filteredList[index].tcImageUrl!,
+                                                                      //             height: size.height / 1,
+                                                                      //             width: size.height / 1,
+                                                                      //           )
+                                                                      //         : SizedBox(),
+                                                                      //   ],
+                                                                      // ),
+                                                                      Text(
+                                                                          'Present Address',
+                                                                          style:
+                                                                              IMTextStyle.IMSubHeader),
+                                                                      Text(
+                                                                          '${_filteredList[index].prVillage!}'),
+                                                                      Text(
+                                                                          '${_filteredList[index].prPost!}'),
+                                                                      Text(
+                                                                          '${_filteredList[index].prThana!}'),
+                                                                      Text(
+                                                                          '${_filteredList[index].prZila!}'),
+                                                                      Text(
+                                                                          'Permanent Address',
+                                                                          style:
+                                                                              IMTextStyle.IMSubHeader),
+                                                                      Text(
+                                                                          '${_filteredList[index].village!}'),
+                                                                      Text(
+                                                                          '${_filteredList[index].post!}'),
+                                                                      Text(
+                                                                          '${_filteredList[index].thana!}'),
+                                                                      Text(
+                                                                          '${_filteredList[index].zila!}'),
+                                                                    ],
+                                                                  ),
+                                                                ],
+                                                              )
+                                                            : Column(
+                                                                mainAxisAlignment:
+                                                                    MainAxisAlignment
+                                                                        .center,
+                                                                crossAxisAlignment:
+                                                                    CrossAxisAlignment
+                                                                        .center,
+                                                                children: [
+                                                                  Container(
+                                                                    width: publicProvider
+                                                                            .pageWidth(size) *
+                                                                        .5,
+                                                                  ),
+                                                                ],
+                                                              ),
+                                                        const SizedBox(
+                                                            height: 30),
+                                                        MaterialButton(
+                                                          onPressed: () {},
+                                                          color: IMColors
+                                                              .greyColor,
+                                                          child: Text(
+                                                            "UPDATE",
+                                                            style: IMTextStyle
+                                                                .buttonText,
+                                                          ),
+                                                        )
+                                                      ],
+                                                    )),
+                                                actions: <Widget>[
+                                                  TextButton(
+                                                    child: Text('Cancel'),
+                                                    onPressed: () {
+                                                      Navigator.of(context)
+                                                          .pop();
+                                                    },
+                                                  ),
+                                                ],
+                                              );
+                                            });
+                                      },
+                                      child: Padding(
+                                        padding: const EdgeInsets.all(8.0),
+                                        child: Icon(
+                                          Icons.visibility,
+                                          size: publicProvider.isWindows
+                                              ? size.height * .02
+                                              : size.width * .02,
+                                          color: Colors.green,
+                                        ),
+                                      ),
+                                    ),
+                                  ],
+                                ),
+                              ),
+                            ],
+                          ),
+                        ],
+                      ),
                     );
                   })
         ],
@@ -568,222 +739,222 @@ class _AllStudentState extends State<AllStudent> {
     );
   }
 
-  Widget productDetailsData(PublicProvider publicProvider,
-      FirebaseProvider firebaseProvider, int index, Size size) {
-    return Padding(
-      padding: const EdgeInsets.all(8.0),
-      child: Column(
-        mainAxisAlignment: MainAxisAlignment.start,
-        children: [
-          Padding(
-            padding: const EdgeInsets.all(12.0),
-            child: Text(
-              'Product Details',
-              style: TextStyle(fontSize: 20),
-            ),
-          ),
-          Container(
-            width: publicProvider.isWindows ? size.height / 2 : size.width * .2,
-            decoration: BoxDecoration(
-                borderRadius: BorderRadius.all(Radius.circular(10)),
-                border: Border.all(width: 1, color: Colors.grey)),
-            child: Padding(
-              padding: const EdgeInsets.all(8.0),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Padding(
-                    padding: const EdgeInsets.only(top: 8.0, bottom: 8.0),
-                    child: Text(
-                      firebaseProvider.studentList[index].title,
-                      style: TextStyle(
-                        fontSize: publicProvider.isWindows
-                            ? size.height * .025
-                            : size.width * .025,
-                      ),
-                    ),
-                  ),
-                  Padding(
-                      padding: const EdgeInsets.only(top: 8.0, bottom: 8.0),
-                      child: Text(
-                        'Description: ${firebaseProvider.studentList[index].description}',
-                        style: TextStyle(
-                          fontSize: publicProvider.isWindows
-                              ? size.height * .025
-                              : size.width * .025,
-                        ),
-                      )),
-                  Padding(
-                      padding: const EdgeInsets.only(top: 8.0, bottom: 8.0),
-                      child: Text(
-                        'Price: ${firebaseProvider.studentList[index].price}',
-                        style: TextStyle(
-                          fontSize: publicProvider.isWindows
-                              ? size.height * .025
-                              : size.width * .025,
-                        ),
-                      )),
-                  firebaseProvider.studentList[index].colors.length == 0
-                      ? SizedBox()
-                      : Padding(
-                          padding: const EdgeInsets.only(top: 8.0, bottom: 8.0),
-                          child: Container(
-                            // width: size.height*.5,
-                            height: 30,
-                            child: Row(
-                              children: [
-                                Text(
-                                  'Color:',
-                                  style: TextStyle(
-                                    fontSize: publicProvider.isWindows
-                                        ? size.height * .025
-                                        : size.width * .025,
-                                  ),
-                                ),
-                                ListView.builder(
-                                    scrollDirection: Axis.horizontal,
-                                    shrinkWrap: true,
-                                    itemCount: firebaseProvider
-                                        .studentList[index].colors.length,
-                                    itemBuilder: (_, idx) {
-                                      return Padding(
-                                        padding: const EdgeInsets.all(8.0),
-                                        child: Row(
-                                          children: [
-                                            Container(
-                                              height: 10,
-                                              width: 10,
-                                              decoration: BoxDecoration(
-                                                  color: Color(int.parse(
-                                                      firebaseProvider
-                                                          .studentList[index]
-                                                          .colors[idx])),
-                                                  shape: BoxShape.circle),
-                                            ),
-                                          ],
-                                        ),
-                                      );
-                                    }),
-                              ],
-                            ),
-                          )),
-                  firebaseProvider.studentList[index].size.length == 0
-                      ? SizedBox()
-                      : Container(
-                          // width: size.height*.5,
-                          height: 20,
-                          child: Row(
-                            crossAxisAlignment: CrossAxisAlignment.center,
-                            children: [
-                              Text(
-                                'Size:',
-                                style: TextStyle(
-                                  fontSize: publicProvider.isWindows
-                                      ? size.height * .025
-                                      : size.width * .025,
-                                ),
-                              ),
-                              ListView.builder(
-                                  scrollDirection: Axis.horizontal,
-                                  shrinkWrap: true,
-                                  itemCount: firebaseProvider
-                                      .studentList[index].size.length,
-                                  itemBuilder: (_, idx) {
-                                    return Padding(
-                                      padding: const EdgeInsets.symmetric(
-                                          horizontal: 8.0),
-                                      child: Text(
-                                        firebaseProvider
-                                            .studentList[index].size[idx],
-                                        style: TextStyle(
-                                          fontSize: publicProvider.isWindows
-                                              ? size.height * .025
-                                              : size.width * .025,
-                                        ),
-                                      ),
-                                    );
-                                  }),
-                            ],
-                          ),
-                        ),
-                  Padding(
-                      padding: const EdgeInsets.only(top: 8.0, bottom: 8.0),
-                      child: Text(
-                        'Profit Amount: ${firebaseProvider.studentList[index].profitAmount}',
-                        style: TextStyle(
-                          fontSize: publicProvider.isWindows
-                              ? size.height * .025
-                              : size.width * .025,
-                        ),
-                      )),
-                  Padding(
-                      padding: const EdgeInsets.only(top: 8.0, bottom: 8.0),
-                      child: Text(
-                        'Category:  ${firebaseProvider.studentList[index].category}',
-                        style: TextStyle(
-                          fontSize: publicProvider.isWindows
-                              ? size.height * .025
-                              : size.width * .025,
-                        ),
-                      )),
-                  Padding(
-                      padding: const EdgeInsets.only(top: 8.0, bottom: 8.0),
-                      child: Text(
-                        'Subcategory: ${firebaseProvider.studentList[index].subCategory}',
-                        style: TextStyle(
-                          fontSize: publicProvider.isWindows
-                              ? size.height * .025
-                              : size.width * .025,
-                        ),
-                      )),
-                  Text(
-                    'Upload Date: ${firebaseProvider.studentList[index].date}',
-                    style: TextStyle(
-                      fontSize: publicProvider.isWindows
-                          ? size.height * .025
-                          : size.width * .025,
-                    ),
-                  ),
-                ],
-              ),
-            ),
-          ),
-          Padding(
-            padding: const EdgeInsets.all(8.0),
-            child: TextButton(
-                onPressed: () {
-                  setState(() {
-                    publicProvider.subCategory = 'Update Product';
-                    publicProvider.category = '';
-                  });
-
-                  Navigator.pop(context);
-                },
-                child: Container(
-                    decoration: BoxDecoration(
-                        color: Colors.green,
-                        borderRadius: BorderRadius.all(Radius.circular(5)),
-                        border: Border.all(width: 1, color: Colors.green)),
-                    child: Padding(
-                      padding: const EdgeInsets.symmetric(
-                        horizontal: 50.0,
-                        vertical: 5,
-                      ),
-                      child: Text(
-                        'Update',
-                        style: TextStyle(
-                          color: Colors.white,
-                          fontSize: publicProvider.isWindows
-                              ? size.height * .03
-                              : size.width * .03,
-                        ),
-                      ),
-                    ))),
-          )
-        ],
-      ),
-    );
-  }
+  // Widget productDetailsData(PublicProvider publicProvider,
+  //     FirebaseProvider firebaseProvider, int index, Size size) {
+  //   return Padding(
+  //     padding: const EdgeInsets.all(8.0),
+  //     child: Column(
+  //       mainAxisAlignment: MainAxisAlignment.start,
+  //       children: [
+  //         Padding(
+  //           padding: const EdgeInsets.all(12.0),
+  //           child: Text(
+  //             'Product Details',
+  //             style: TextStyle(fontSize: 20),
+  //           ),
+  //         ),
+  //         Container(
+  //           width: publicProvider.isWindows ? size.height / 2 : size.width * .2,
+  //           decoration: BoxDecoration(
+  //               borderRadius: BorderRadius.all(Radius.circular(10)),
+  //               border: Border.all(width: 1, color: Colors.grey)),
+  //           child: Padding(
+  //             padding: const EdgeInsets.all(8.0),
+  //             child: Column(
+  //               crossAxisAlignment: CrossAxisAlignment.start,
+  //               children: [
+  //                 Padding(
+  //                   padding: const EdgeInsets.only(top: 8.0, bottom: 8.0),
+  //                   child: Text(
+  //                     firebaseProvider.studentList[index].title,
+  //                     style: TextStyle(
+  //                       fontSize: publicProvider.isWindows
+  //                           ? size.height * .025
+  //                           : size.width * .025,
+  //                     ),
+  //                   ),
+  //                 ),
+  //                 Padding(
+  //                     padding: const EdgeInsets.only(top: 8.0, bottom: 8.0),
+  //                     child: Text(
+  //                       'Description: ${firebaseProvider.studentList[index].description}',
+  //                       style: TextStyle(
+  //                         fontSize: publicProvider.isWindows
+  //                             ? size.height * .025
+  //                             : size.width * .025,
+  //                       ),
+  //                     )),
+  //                 Padding(
+  //                     padding: const EdgeInsets.only(top: 8.0, bottom: 8.0),
+  //                     child: Text(
+  //                       'Price: ${firebaseProvider.studentList[index].price}',
+  //                       style: TextStyle(
+  //                         fontSize: publicProvider.isWindows
+  //                             ? size.height * .025
+  //                             : size.width * .025,
+  //                       ),
+  //                     )),
+  //                 firebaseProvider.studentList[index].colors.length == 0
+  //                     ? SizedBox()
+  //                     : Padding(
+  //                         padding: const EdgeInsets.only(top: 8.0, bottom: 8.0),
+  //                         child: Container(
+  //                           // width: size.height*.5,
+  //                           height: 30,
+  //                           child: Row(
+  //                             children: [
+  //                               Text(
+  //                                 'Color:',
+  //                                 style: TextStyle(
+  //                                   fontSize: publicProvider.isWindows
+  //                                       ? size.height * .025
+  //                                       : size.width * .025,
+  //                                 ),
+  //                               ),
+  //                               ListView.builder(
+  //                                   scrollDirection: Axis.horizontal,
+  //                                   shrinkWrap: true,
+  //                                   itemCount: firebaseProvider
+  //                                       .studentList[index].colors.length,
+  //                                   itemBuilder: (_, idx) {
+  //                                     return Padding(
+  //                                       padding: const EdgeInsets.all(8.0),
+  //                                       child: Row(
+  //                                         children: [
+  //                                           Container(
+  //                                             height: 10,
+  //                                             width: 10,
+  //                                             decoration: BoxDecoration(
+  //                                                 color: Color(int.parse(
+  //                                                     firebaseProvider
+  //                                                         .studentList[index]
+  //                                                         .colors[idx])),
+  //                                                 shape: BoxShape.circle),
+  //                                           ),
+  //                                         ],
+  //                                       ),
+  //                                     );
+  //                                   }),
+  //                             ],
+  //                           ),
+  //                         )),
+  //                 firebaseProvider.studentList[index].size.length == 0
+  //                     ? SizedBox()
+  //                     : Container(
+  //                         // width: size.height*.5,
+  //                         height: 20,
+  //                         child: Row(
+  //                           crossAxisAlignment: CrossAxisAlignment.center,
+  //                           children: [
+  //                             Text(
+  //                               'Size:',
+  //                               style: TextStyle(
+  //                                 fontSize: publicProvider.isWindows
+  //                                     ? size.height * .025
+  //                                     : size.width * .025,
+  //                               ),
+  //                             ),
+  //                             ListView.builder(
+  //                                 scrollDirection: Axis.horizontal,
+  //                                 shrinkWrap: true,
+  //                                 itemCount: firebaseProvider
+  //                                     .studentList[index].size.length,
+  //                                 itemBuilder: (_, idx) {
+  //                                   return Padding(
+  //                                     padding: const EdgeInsets.symmetric(
+  //                                         horizontal: 8.0),
+  //                                     child: Text(
+  //                                       firebaseProvider
+  //                                           .studentList[index].size[idx],
+  //                                       style: TextStyle(
+  //                                         fontSize: publicProvider.isWindows
+  //                                             ? size.height * .025
+  //                                             : size.width * .025,
+  //                                       ),
+  //                                     ),
+  //                                   );
+  //                                 }),
+  //                           ],
+  //                         ),
+  //                       ),
+  //                 Padding(
+  //                     padding: const EdgeInsets.only(top: 8.0, bottom: 8.0),
+  //                     child: Text(
+  //                       'Profit Amount: ${firebaseProvider.studentList[index].profitAmount}',
+  //                       style: TextStyle(
+  //                         fontSize: publicProvider.isWindows
+  //                             ? size.height * .025
+  //                             : size.width * .025,
+  //                       ),
+  //                     )),
+  //                 Padding(
+  //                     padding: const EdgeInsets.only(top: 8.0, bottom: 8.0),
+  //                     child: Text(
+  //                       'Category:  ${firebaseProvider.studentList[index].category}',
+  //                       style: TextStyle(
+  //                         fontSize: publicProvider.isWindows
+  //                             ? size.height * .025
+  //                             : size.width * .025,
+  //                       ),
+  //                     )),
+  //                 Padding(
+  //                     padding: const EdgeInsets.only(top: 8.0, bottom: 8.0),
+  //                     child: Text(
+  //                       'Subcategory: ${firebaseProvider.studentList[index].subCategory}',
+  //                       style: TextStyle(
+  //                         fontSize: publicProvider.isWindows
+  //                             ? size.height * .025
+  //                             : size.width * .025,
+  //                       ),
+  //                     )),
+  //                 Text(
+  //                   'Upload Date: ${firebaseProvider.studentList[index].date}',
+  //                   style: TextStyle(
+  //                     fontSize: publicProvider.isWindows
+  //                         ? size.height * .025
+  //                         : size.width * .025,
+  //                   ),
+  //                 ),
+  //               ],
+  //             ),
+  //           ),
+  //         ),
+  //         Padding(
+  //           padding: const EdgeInsets.all(8.0),
+  //           child: TextButton(
+  //               onPressed: () {
+  //                 setState(() {
+  //                   publicProvider.subCategory = 'Update Product';
+  //                   publicProvider.category = '';
+  //                 });
+  //
+  //                 Navigator.pop(context);
+  //               },
+  //               child: Container(
+  //                   decoration: BoxDecoration(
+  //                       color: Colors.green,
+  //                       borderRadius: BorderRadius.all(Radius.circular(5)),
+  //                       border: Border.all(width: 1, color: Colors.green)),
+  //                   child: Padding(
+  //                     padding: const EdgeInsets.symmetric(
+  //                       horizontal: 50.0,
+  //                       vertical: 5,
+  //                     ),
+  //                     child: Text(
+  //                       'Update',
+  //                       style: TextStyle(
+  //                         color: Colors.white,
+  //                         fontSize: publicProvider.isWindows
+  //                             ? size.height * .03
+  //                             : size.width * .03,
+  //                       ),
+  //                     ),
+  //                   ))),
+  //         )
+  //       ],
+  //     ),
+  //   );
+  // }
 
   Future deleteSinglePhoto(List<dynamic> photos) async {
     try {

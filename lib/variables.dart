@@ -34,6 +34,8 @@ class Variables {
     ];
     return data;
   }
+
+  int? productIndex;
 }
 
 class Entry {

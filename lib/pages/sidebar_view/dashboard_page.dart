@@ -25,7 +25,6 @@ class _DashBoardPageState extends State<DashBoardPage> {
   final Duration animDuration = const Duration(milliseconds: 250);
   int touchedIndex = -1;
   bool isPlaying = false;
-
   int counter = 0;
 
   List<UserModel> _totalUserList = [];
@@ -120,103 +119,100 @@ class _DashBoardPageState extends State<DashBoardPage> {
     // }
     return SingleChildScrollView(
       scrollDirection: Axis.vertical,
-      child: SingleChildScrollView(
-        scrollDirection: Axis.vertical,
-        child: Container(
-          width: publicProvider.pageWidth(size),
-          child: Padding(
-            padding: const EdgeInsets.all(8.0),
-            child: Column(
-              mainAxisAlignment: MainAxisAlignment.start,
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                // _isLoading
-                //     ? Padding(
-                //         padding: EdgeInsets.only(top: size.height * .4),
-                //         child: fadingCircle,
-                //       )
-                //     : SingleChildScrollView(
-                //         scrollDirection: Axis.vertical,
-                //         child: Align(
-                //           alignment: publicProvider.isWindows
-                //               ? Alignment.topLeft
-                //               : Alignment.center,
-                //           child: GridView(
-                //             scrollDirection: Axis.vertical,
-                //             shrinkWrap: true,
-                //             gridDelegate:
-                //                 SliverGridDelegateWithFixedCrossAxisCount(
-                //                     crossAxisCount:
-                //                         publicProvider.isWindows ? 4 : 1,
-                //                     childAspectRatio: 3.5 / 2),
-                //             children: [
-                //               _gridViewTile(
-                //                   size,
-                //                   'Product',
-                //                   Color(0xff9D7CFD),
-                //                   'Total Product',
-                //                   'Soled ',
-                //                   '${firebaseProvider.productList.length}',
-                //                   '${firebaseProvider.productOrderList.length}'),
-                //               _gridViewTile(
-                //                   size,
-                //                   'Package',
-                //                   Color(0xff00B5C9),
-                //                   'Total Package',
-                //                   'Soled Package',
-                //                   '${firebaseProvider.packageList.length}',
-                //                   '${firebaseProvider.soldPackageList.length}'),
-                //               _gridViewTile(
-                //                   size,
-                //                   'Order',
-                //                   Color(0xffFF8C00),
-                //                   'Product Order',
-                //                   'Package Order',
-                //                   '${firebaseProvider.productOrderList.length}',
-                //                   '${firebaseProvider.packageOrderList.length}'),
-                //               _gridViewTile(
-                //                   size,
-                //                   'Customer',
-                //                   Color(0xffFF8C00),
-                //                   'Total Customer',
-                //                   'New Customer',
-                //                   '${firebaseProvider.userList.length}',
-                //                   '${_todayUserList.length}'),
-                //               _gridViewTile(
-                //                   size,
-                //                   'Insurance',
-                //                   Color(0xffFF8C00),
-                //                   'Pending',
-                //                   'Transferred',
-                //                   '${firebaseProvider.insuranceRequestList.length}',
-                //                   '${firebaseProvider.insuranceTransferredRequestList.length}'),
-                //               _gridViewTile(
-                //                   size,
-                //                   'Deposit',
-                //                   Color(0xff00A958),
-                //                   'Request ',
-                //                   'Total',
-                //                   '${firebaseProvider.depositRequestList.length}',
-                //                   '${firebaseProvider.userList.length}'),
-                //               _gridViewTile(
-                //                   size,
-                //                   'Advertisement',
-                //                   Color(0xff00C4FE),
-                //                   'Total Video',
-                //                   'Rate',
-                //                   '${firebaseProvider.advertisementList.length}',
-                //                   '1'),
-                //             ],
-                //           ),
-                //         ),
-                //       ),
-                MyFiles(),
-                SizedBox(height: defaultPadding),
-                ChartDetails(),
-                SizedBox(height: defaultPadding),
-                StudentTeacherList(),
-              ],
-            ),
+      child: Container(
+        width: publicProvider.pageWidth(size),
+        child: Padding(
+          padding: const EdgeInsets.all(8.0),
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.start,
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              // _isLoading
+              //     ? Padding(
+              //         padding: EdgeInsets.only(top: size.height * .4),
+              //         child: fadingCircle,
+              //       )
+              //     : SingleChildScrollView(
+              //         scrollDirection: Axis.vertical,
+              //         child: Align(
+              //           alignment: publicProvider.isWindows
+              //               ? Alignment.topLeft
+              //               : Alignment.center,
+              //           child: GridView(
+              //             scrollDirection: Axis.vertical,
+              //             shrinkWrap: true,
+              //             gridDelegate:
+              //                 SliverGridDelegateWithFixedCrossAxisCount(
+              //                     crossAxisCount:
+              //                         publicProvider.isWindows ? 4 : 1,
+              //                     childAspectRatio: 3.5 / 2),
+              //             children: [
+              //               _gridViewTile(
+              //                   size,
+              //                   'Product',
+              //                   Color(0xff9D7CFD),
+              //                   'Total Product',
+              //                   'Soled ',
+              //                   '${firebaseProvider.productList.length}',
+              //                   '${firebaseProvider.productOrderList.length}'),
+              //               _gridViewTile(
+              //                   size,
+              //                   'Package',
+              //                   Color(0xff00B5C9),
+              //                   'Total Package',
+              //                   'Soled Package',
+              //                   '${firebaseProvider.packageList.length}',
+              //                   '${firebaseProvider.soldPackageList.length}'),
+              //               _gridViewTile(
+              //                   size,
+              //                   'Order',
+              //                   Color(0xffFF8C00),
+              //                   'Product Order',
+              //                   'Package Order',
+              //                   '${firebaseProvider.productOrderList.length}',
+              //                   '${firebaseProvider.packageOrderList.length}'),
+              //               _gridViewTile(
+              //                   size,
+              //                   'Customer',
+              //                   Color(0xffFF8C00),
+              //                   'Total Customer',
+              //                   'New Customer',
+              //                   '${firebaseProvider.userList.length}',
+              //                   '${_todayUserList.length}'),
+              //               _gridViewTile(
+              //                   size,
+              //                   'Insurance',
+              //                   Color(0xffFF8C00),
+              //                   'Pending',
+              //                   'Transferred',
+              //                   '${firebaseProvider.insuranceRequestList.length}',
+              //                   '${firebaseProvider.insuranceTransferredRequestList.length}'),
+              //               _gridViewTile(
+              //                   size,
+              //                   'Deposit',
+              //                   Color(0xff00A958),
+              //                   'Request ',
+              //                   'Total',
+              //                   '${firebaseProvider.depositRequestList.length}',
+              //                   '${firebaseProvider.userList.length}'),
+              //               _gridViewTile(
+              //                   size,
+              //                   'Advertisement',
+              //                   Color(0xff00C4FE),
+              //                   'Total Video',
+              //                   'Rate',
+              //                   '${firebaseProvider.advertisementList.length}',
+              //                   '1'),
+              //             ],
+              //           ),
+              //         ),
+              //       ),
+              MyFiles(),
+              SizedBox(height: defaultPadding),
+              ChartDetails(),
+              SizedBox(height: defaultPadding),
+              StudentTeacherList(),
+            ],
           ),
         ),
       ),
